@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 4000;
 
 const app = express();
 
-const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=${REACT_APP_API_KEY}`;
+// const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=${REACT_APP_API_KEY}`;
 
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
