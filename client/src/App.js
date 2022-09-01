@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./styles/App.css";
 
 function App() {
-  const url = "http://localhost:4000/api";
+  const url = "https://stock-watcher-wcant.herokuapp.com/api";
 
   const [data, setData] = useState(null);
 
