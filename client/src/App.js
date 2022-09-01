@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import "./styles/App.css";
 
 function App() {
-  const url = "https://stock-watcher-wcant.herokuapp.com/api";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:4000/api"
+      : "https://stock-watcher-wcant.herokuapp.com/api";
 
   const [data, setData] = useState(null);
 
@@ -27,12 +30,12 @@ function App() {
     } catch (error) {
       console.log("Error:", error);
     }
-  });
+  }, []);
 
   return (
     <div className="App">
       <p>Data Output:</p>
-      <p>{!data ? "Loading..." : data}</p>
+      <p>{!data ? "Loading..." : data.message}</p>
     </div>
   );
 }
