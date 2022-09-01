@@ -8,9 +8,13 @@ const app = express();
 
 // const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=${REACT_APP_API_KEY}`;
 app.use(cors());
+
+app.disable("x-powered-by");
+
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.get("/api", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
   res.json({ message: "hello from server" });
 });
 
