@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "./styles/App.css";
+import SymbolInput from "./components/SymbolInput";
+import CardContainer from "./components/CardContainer";
 
 function App() {
   const url =
@@ -9,6 +11,8 @@ function App() {
 
   const [data, setData] = useState(null);
 
+  const [symbols, setSymbols] = useState([]);
+  console.log(symbols);
   useEffect(() => {
     try {
       fetch(url, {
@@ -34,8 +38,8 @@ function App() {
 
   return (
     <div className="App">
-      <p>Data Output:</p>
-      <p>{!data ? "Loading..." : data.message}</p>
+      <SymbolInput setSymbols={setSymbols} />
+      <CardContainer />
     </div>
   );
 }

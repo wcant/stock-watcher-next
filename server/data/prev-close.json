@@ -1,0 +1,332 @@
+[
+  {
+    "ticker": "AAPL",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "AAPL",
+        "v": 74230074,
+        "vw": 156.5232,
+        "o": 156.64,
+        "c": 157.96,
+        "h": 158.42,
+        "l": 154.67,
+        "t": 1662062400000,
+        "n": 654669
+      }
+    ],
+    "status": "OK",
+    "request_id": "41fca9392c69a66e1c9ed15e48b69c72",
+    "count": 1
+  },
+  {
+    "ticker": "CAT",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "CAT",
+        "v": 2686280,
+        "vw": 181.7595,
+        "o": 182.27,
+        "c": 182.44,
+        "h": 183.21,
+        "l": 180.1,
+        "t": 1662062400000,
+        "n": 49105
+      }
+    ],
+    "status": "OK",
+    "request_id": "8cae97187657aab605b03ea4835ee0d5",
+    "count": 1
+  },
+  {
+    "ticker": "MSFT",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "MSFT",
+        "v": 23263431,
+        "vw": 258.2566,
+        "o": 258.87,
+        "c": 260.4,
+        "h": 260.89,
+        "l": 255.41,
+        "t": 1662062400000,
+        "n": 332384
+      }
+    ],
+    "status": "OK",
+    "request_id": "fc8054c1e47ad1f92cf829451a782c25",
+    "count": 1
+  },
+  {
+    "ticker": "GOOGL",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "GOOGL",
+        "v": 28360926,
+        "vw": 108.7819,
+        "o": 108.28,
+        "c": 109.74,
+        "h": 110.445,
+        "l": 107.36,
+        "t": 1662062400000,
+        "n": 365918
+      }
+    ],
+    "status": "OK",
+    "request_id": "c40fc5f01887a011f42c68b4874fd978",
+    "count": 1
+  },
+  {
+    "ticker": "CMG",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "CMG",
+        "v": 241600,
+        "vw": 1586.845,
+        "o": 1578.84,
+        "c": 1613.15,
+        "h": 1615.53,
+        "l": 1552.12,
+        "t": 1662062400000,
+        "n": 17182
+      }
+    ],
+    "status": "OK",
+    "request_id": "5f97cda2f8ae229ce475c044a4e70112",
+    "count": 1
+  },
+  {
+    "ticker": "MRNA",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "MRNA",
+        "v": 6664827,
+        "vw": 135.5017,
+        "o": 131.13,
+        "c": 138.95,
+        "h": 139,
+        "l": 130.11,
+        "t": 1662062400000,
+        "n": 92196
+      }
+    ],
+    "status": "OK",
+    "request_id": "f50261ba8455a55bbbd2bcf090de008a",
+    "count": 1
+  },
+  {
+    "ticker": "MCD",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "MCD",
+        "v": 2577843,
+        "vw": 255.4916,
+        "o": 251.82,
+        "c": 256.47,
+        "h": 256.53,
+        "l": 251.76,
+        "t": 1662062400000,
+        "n": 56295
+      }
+    ],
+    "status": "OK",
+    "request_id": "a7b2ee9b29bb4455d9be59bc1613e7a3",
+    "count": 1
+  },
+  {
+    "ticker": "GE",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "GE",
+        "v": 4985500,
+        "vw": 72.4476,
+        "o": 73.25,
+        "c": 73.08,
+        "h": 73.25,
+        "l": 71.43,
+        "t": 1662062400000,
+        "n": 64666
+      }
+    ],
+    "status": "OK",
+    "request_id": "b504f9761921d22b94b71b0272bc38bc",
+    "count": 1
+  },
+  {
+    "ticker": "SBUX",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "SBUX",
+        "v": 7556805,
+        "vw": 84.3079,
+        "o": 83.7,
+        "c": 85.4,
+        "h": 85.465,
+        "l": 82.93,
+        "t": 1662062400000,
+        "n": 88889
+      }
+    ],
+    "status": "OK",
+    "request_id": "ad0f15d99ca4c21efb2ab331e8a7f9a5",
+    "count": 1
+  },
+  {
+    "ticker": "AMZN",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "AMZN",
+        "v": 56662045,
+        "vw": 125.8648,
+        "o": 126,
+        "c": 127.82,
+        "h": 128.02,
+        "l": 123.66,
+        "t": 1662062400000,
+        "n": 571472
+      }
+    ],
+    "status": "OK",
+    "request_id": "c520369e66433a4834d261ca0a2ab06a",
+    "count": 1
+  },
+  {
+    "ticker": "AMD",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "AMD",
+        "v": 94854710,
+        "vw": 80.5507,
+        "o": 82.345,
+        "c": 82.33,
+        "h": 82.755,
+        "l": 78.52,
+        "t": 1662062400000,
+        "n": 620113
+      }
+    ],
+    "status": "OK",
+    "request_id": "2cb6e378d63ca0ab8b7081838086b778",
+    "count": 1
+  },
+  {
+    "ticker": "BAC",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "BAC",
+        "v": 32848884,
+        "vw": 33.1315,
+        "o": 33.34,
+        "c": 33.47,
+        "h": 33.49,
+        "l": 32.6614,
+        "t": 1662062400000,
+        "n": 134406
+      }
+    ],
+    "status": "OK",
+    "request_id": "d701db954d869df17d97d4d00213191c",
+    "count": 1
+  },
+  {
+    "ticker": "BRK.A",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "BRK.A",
+        "v": 2535,
+        "vw": 420476.5076,
+        "o": 421000,
+        "c": 424289.98,
+        "h": 424906.998,
+        "l": 416882.3429,
+        "t": 1662062400000,
+        "n": 2518
+      }
+    ],
+    "status": "OK",
+    "request_id": "5697b4d7b6a47d90665673b0cebbe914",
+    "count": 1
+  },
+  {
+    "ticker": "INTC",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "INTC",
+        "v": 36440781,
+        "vw": 31.5023,
+        "o": 31.572,
+        "c": 31.76,
+        "h": 31.825,
+        "l": 31.13,
+        "t": 1662062400000,
+        "n": 203772
+      }
+    ],
+    "status": "OK",
+    "request_id": "e5dd196c3485d30ca23f68025d210bfe",
+    "count": 1
+  },
+  {
+    "ticker": "V",
+    "queryCount": 1,
+    "resultsCount": 1,
+    "adjusted": true,
+    "results": [
+      {
+        "T": "V",
+        "v": 5608324,
+        "vw": 198.6361,
+        "o": 198.72,
+        "c": 200.13,
+        "h": 200.43,
+        "l": 196.66,
+        "t": 1662062400000,
+        "n": 91593
+      }
+    ],
+    "status": "OK",
+    "request_id": "b615e01db81d403533177390434be831",
+    "count": 1
+  }
+]
