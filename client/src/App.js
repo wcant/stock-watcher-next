@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import "./styles/App.css";
 import SymbolInput from "./components/SymbolInput";
 import CardContainer from "./components/CardContainer";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faCircleXmark);
 
 function App() {
   const url =
@@ -39,7 +43,7 @@ function App() {
   return (
     <div className="App">
       <SymbolInput setSymbols={setSymbols} />
-      <CardContainer />
+      <CardContainer symbols={symbols} setSymbols={setSymbols} dataUrl={url} />
     </div>
   );
 }
