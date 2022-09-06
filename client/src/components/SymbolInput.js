@@ -6,7 +6,7 @@ export default function SymbolInput(props) {
   const [value, setValue] = useState("");
 
   function handleChange(e) {
-    setValue(e.target.value);
+    setValue(e.target.value.toUpperCase());
   }
 
   function handleKeyUp(e) {
@@ -18,11 +18,13 @@ export default function SymbolInput(props) {
           ? [...prevSymbols]
           : [...prevSymbols, value];
       });
+      setValue("");
     }
   }
 
   return (
     <input
+      className="symbol-input"
       type="text"
       name="symbol"
       id="symbol-input"

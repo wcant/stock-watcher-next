@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import StockCard from "./StockCard";
-import nanoid from "nanoid";
+import { nanoid } from "nanoid";
 
 export default function CardContainer(props) {
   const { symbols, setSymbols, dataUrl } = props;
 
-  function makeStockCards(symbol) {
+  function makeStockCards(symbol, index) {
     return (
-      <StockCard symbol={symbol} setSymbols={setSymbols} dataUrl={dataUrl} />
+      <StockCard
+        key={symbol}
+        symbol={symbol}
+        setSymbols={setSymbols}
+        dataUrl={dataUrl}
+      />
     );
   }
 
-  return <div className={"cardContainer"}>{symbols.map(makeStockCards)}</div>;
+  return <div className={"card-container"}>{symbols.map(makeStockCards)}</div>;
 }
