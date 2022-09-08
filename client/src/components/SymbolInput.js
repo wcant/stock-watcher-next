@@ -28,7 +28,7 @@ export default function SymbolInput(props) {
       type="text"
       name="symbol"
       id="symbol-input"
-      placeholder="Symbol (e.g. IBM, AAPL,...)"
+      placeholder="Symbol (e.g. AMD, AAPL,...)"
       onChange={handleChange}
       onKeyUp={handleKeyUp}
       value={value}

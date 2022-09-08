@@ -55,10 +55,8 @@ app.all("*", function (req, res, next) {
 });
 
 app.get("/api/day-open-close/:symbol", async (req, res) => {
-  const { symbol } = req.params;
   // responding with saved data for demo purposes
-  // const data = await getData();
-
+  const { symbol } = req.params;
   for (let i = 0; i < openClose.length; i++) {
     if (openClose[i].symbol === symbol) {
       res.json(openClose[i]);
@@ -69,9 +67,8 @@ app.get("/api/day-open-close/:symbol", async (req, res) => {
 });
 
 app.get("/api/prev-close/:symbol", async (req, res) => {
-  const { symbol } = req.params;
   // responding with saved data for demo purposes
-  // const data = await getData();
+  const { symbol } = req.params;
   for (let i = 0; i < prevClose.length; i++) {
     if (prevClose[i].ticker === symbol) {
       res.json(prevClose[i]);
@@ -83,8 +80,11 @@ app.get("/api/prev-close/:symbol", async (req, res) => {
 
 app.get("/api/intraday/:symbol", async (req, res) => {
   // responding with saved data for demo purposes
-  // const data = await getData();
-  res.json(data);
+  const { symbol } = req.params;
+  const intradayData = require(dataDir + `/intraday/${symbol}.json`);
+
+  res.json(intradayData);
+  if (!res.headersSent) res.json({ message: "Symbol data not available." });
 });
 
 app.get("*", (req, res) => {

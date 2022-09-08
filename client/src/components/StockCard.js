@@ -1,24 +1,29 @@
 import { useState, useEffect, memo } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import StockChart from "./StockChart";
 
 const StockCard = memo(function StockCard(props) {
   const { symbol, setSymbols, dataUrl } = props;
 
   const [data, setData] = useState({});
+  const [updateTime, setUpdateTime] = useState("");
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(dataUrl + `/day-open-close/${symbol}`);
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    async function getData() {
-      try {
-        const response = await axios.get(dataUrl + `/day-open-close/${symbol}`);
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
     getData();
-  }, [setData, symbol, dataUrl]);
+  }, []);
+
   console.log(`after useEffect in ${symbol}`);
+
   function handleDeleteCard() {
     console.log("clicked delete");
     setSymbols((prevSymbols) => {
@@ -29,37 +34,40 @@ const StockCard = memo(function StockCard(props) {
   console.log(data);
   return (
     <div className="stock-card">
-      <div>
-        <h2 className="stock--symbol">{symbol}</h2>
-        <span onClick={handleDeleteCard}>
-          <FontAwesomeIcon icon="circle-xmark" />
+      <span className="close-card-icon-bg" onClick={handleDeleteCard}>
+        <FontAwesomeIcon className="close-card-icon" icon="circle-xmark" />
+      </span>
+      <div className="stock--header">
+        <span>
+          <h2 className="stock--symbol">{symbol}</h2>
+          <span className="stock--last-update">
+            Last Update: {data.hasOwnProperty("from") ? `${data.from}` : "-"}
+          </span>
         </span>
       </div>
-      <div className="stock--plot"></div>
+      <div className="stock--plot">
+        <StockChart symbol={symbol} dataUrl={dataUrl} />
+      </div>
       <div className="stock--details">
-        <span>
-          Date: <br />
-          {data.hasOwnProperty("from") ? `${data.from}` : "-"}
+        <span className="details-row">
+          <span className="stock--details-name">Open:</span>
+          <span>{data.hasOwnProperty("open") ? `$${data.open}` : "-"}</span>
         </span>
-        <span>
-          Open: <br />
-          {data.hasOwnProperty("open") ? `$${data.open}` : "-"}
+        <span className="details-row">
+          <span className="stock--details-name">Close:</span> <br />
+          <span>{data.hasOwnProperty("close") ? `$${data.close}` : "-"}</span>
         </span>
-        <span>
-          Close: <br />
-          {data.hasOwnProperty("close") ? `$${data.close}` : "-"}
+        <span className="details-row">
+          <span className="stock--details-name">High:</span> <br />
+          <span>{data.hasOwnProperty("high") ? `$${data.high}` : "-"}</span>
         </span>
-        <span>
-          High: <br />
-          {data.hasOwnProperty("high") ? `$${data.high}` : "-"}
+        <span className="details-row">
+          <span className="stock--details-name">Low:</span> <br />
+          <span>{data.hasOwnProperty("low") ? `$${data.low}` : "-"}</span>
         </span>
-        <span>
-          Low: <br />
-          {data.hasOwnProperty("low") ? `$${data.low}` : "-"}
-        </span>
-        <span>
-          Volume: <br />
-          {data.hasOwnProperty("volume") ? data.volume : "-"}
+        <span className="details-row">
+          <span className="stock--details-name">Volume:</span> <br />
+          <span>{data.hasOwnProperty("volume") ? data.volume : "-"}</span>
         </span>
       </div>
     </div>
