@@ -45,9 +45,9 @@ const StockCard = memo(function StockCard(props) {
           </span>
         </span>
       </div>
-      <div className="stock--plot">
-        <StockChart symbol={symbol} dataUrl={dataUrl} />
-      </div>
+      {/* <div className="flex-row"> */}
+      <StockChart symbol={symbol} dataUrl={dataUrl} />
+
       <div className="stock--details">
         <span className="details-row">
           <span className="stock--details-name">Open:</span>
@@ -70,6 +70,7 @@ const StockCard = memo(function StockCard(props) {
           <span>{data.hasOwnProperty("volume") ? data.volume : "-"}</span>
         </span>
       </div>
+      {/* </div> */}
     </div>
   );
 });

@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 900px;
+
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -20,11 +21,12 @@
 .card-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   padding: 1rem 1rem;
   gap: 1rem;
-  max-width: 1024px;
+  width: 100%;
 }
 
 .stock-card {
@@ -35,8 +37,7 @@
   position: relative;
   border-radius: 1rem;
   border: 5px solid #30475e;
-  width: 250px;
-  min-height: 285px;
+  width: 600px;
 }
 
 .stock--header {
@@ -49,7 +50,7 @@
 }
 
 .stock--last-update {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .stock--details-name {
@@ -72,6 +73,11 @@
   justify-content: space-between;
   border-top: 1px solid #dddddd;
   padding: 5px 0;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
 }
 
 .close-card-icon {

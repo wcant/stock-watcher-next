@@ -54,7 +54,7 @@ function collectDataToArrays(startTime, endTime, interval, data) {
 
     // make sure key exists
     if (data["Time Series (5min)"].hasOwnProperty(key)) {
-      trace.x.push(`${date} ${key}`);
+      trace.x.push(`${key}`);
       trace.open.push(data["Time Series (5min)"][key]["1. open"]);
       trace.high.push(data["Time Series (5min)"][key]["2. high"]);
       trace.low.push(data["Time Series (5min)"][key]["3. low"]);
@@ -94,6 +94,8 @@ export default function StockChart(props) {
         visible: false,
       },
     },
+    useResizeHandler: true,
+    style: { width: "100%", height: "100%" },
   });
 
   useEffect(() => {
