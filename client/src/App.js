@@ -9,9 +9,9 @@ library.add(faCircleXmark);
 
 function App() {
   const [url, setUrl] = useState(
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:4000/api"
-      : "https://stock-watcher-wcant.herokuapp.com/api"
+    process.env.NODE_ENV === "production"
+      ? "https://stock-watcher-wcant.herokuapp.com/api"
+      : "http://localhost:4000/api"
   );
 
   const [symbols, setSymbols] = useState([]);
