@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./styles/App.css";
 import SymbolInput from "./components/SymbolInput";
 import CardContainer from "./components/CardContainer";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -40,8 +39,11 @@ function App() {
   // }, []);
 
   return (
-    <div className="App">
-      <SymbolInput setSymbols={setSymbols} />
+    <div className="flex flex-col justify-center p-4">
+      <div className="grid grid-cols-3 items-center">
+        <h1 className="text-2xl font-bold text-white">Stock Watcher</h1>
+        <SymbolInput setSymbols={setSymbols} />
+      </div>
       <CardContainer symbols={symbols} setSymbols={setSymbols} dataUrl={url} />
     </div>
   );

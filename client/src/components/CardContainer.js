@@ -16,5 +16,10 @@ export default function CardContainer(props) {
     );
   }
 
-  return <div className={"card-container"}>{symbols.map(makeStockCards)}</div>;
+  return (
+    // <div className="flex flex-wrap gap-8">{symbols.map(makeStockCards)}</div>
+    <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-6">
+      {symbols.map(makeStockCards)}
+    </div>
+  );
 }

@@ -77,6 +77,7 @@ export default function StockChart(props) {
   const { dataUrl, symbol } = props;
 
   const [intradayData, setIntradayData] = useState(null);
+
   // const [lastRefresh, setLastRefresh] = useState(null);
   const [trace, setTrace] = useState({
     increasing: { line: { color: "green" } },
@@ -94,8 +95,6 @@ export default function StockChart(props) {
         visible: false,
       },
     },
-    useResizeHandler: true,
-    style: { width: "100%", height: "100%" },
   });
 
   useEffect(() => {
@@ -137,5 +136,13 @@ export default function StockChart(props) {
     return () => clearInterval(interval);
   }, []);
 
-  return <Plot data={[trace]} layout={layout} />;
+  return (
+    <Plot
+      data={[trace]}
+      layout={layout}
+      useResizeHandler={true}
+      // className="w-full h-full"
+      style={{ width: "100%", height: "100%" }}
+    />
+  );
 }

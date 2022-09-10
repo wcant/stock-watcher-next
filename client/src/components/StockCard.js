@@ -7,20 +7,49 @@ const StockCard = memo(function StockCard(props) {
   const { symbol, setSymbols, dataUrl } = props;
 
   const [data, setData] = useState({});
+  const [quoteData, setQuoteData] = useState({});
   const [updateTime, setUpdateTime] = useState("");
 
-  const getData = async () => {
+  async function getOpenCloseData() {
     try {
       const response = await axios.get(dataUrl + `/day-open-close/${symbol}`);
       setData(response.data);
     } catch (error) {
       console.log(error);
     }
-  };
+  }
+
+  async function getQuote() {
+    try {
+      console.log(dataUrl + `/quote/${symbol}`);
+      const response = await axios.get(dataUrl + `/quote/${symbol}`);
+      console.log(dataUrl + `/quote/${symbol}`);
+      setQuoteData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    getData();
+    console.log("calling getOpenCloseData");
+    getOpenCloseData();
   }, []);
+
+  useEffect(() => {
+    getQuote();
+    console.log("calling getQuote");
+    const interval = setInterval(() => {
+      getQuote();
+    }, 300000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // useEffect(() => {
+  //   const quoteEl = document.querySelector("#quote");
+  //   quoteEl.classList.add("animate-ping");
+  //   setTimeout(() => quoteEl.classList.remove("animate-ping", 4000));
+  // }, []);
 
   console.log(`after useEffect in ${symbol}`);
 
@@ -31,41 +60,62 @@ const StockCard = memo(function StockCard(props) {
     });
   }
 
+  // Clean up quote strings
+  let quotePrice;
+  let quotePercent;
+  let quoteChange;
+
+  if (quoteData.hasOwnProperty("Global Quote")) {
+    const data = quoteData["Global Quote"];
+
+    quotePrice = `$${parseFloat(data["05. price"]).toFixed(2)}`;
+    quoteChange = `$${data["09. change"].slice(
+      0,
+      data["09. change"].length - 2
+    )}`;
+    quotePercent = `${parseFloat(data["10. change percent"]).toFixed(2)}%`;
+  }
+
   console.log(data);
   return (
-    <div className="stock-card">
+    <div className="flex flex-col justify-center  bg-white p-6 relative">
       <span className="close-card-icon-bg" onClick={handleDeleteCard}>
         <FontAwesomeIcon className="close-card-icon" icon="circle-xmark" />
       </span>
       <div className="stock--header">
-        <span>
-          <h2 className="stock--symbol">{symbol}</h2>
-          <span className="stock--last-update">
-            Last Update: {data.hasOwnProperty("from") ? `${data.from}` : "-"}
-          </span>
+        <h2 className="text-3xl font-bold">{symbol}</h2>
+        <span className="text-xs rounded-full bg-slate-100 px-2 py-1 font-light">
+          Last Update: {Date().slice(0, 24)}
+          {/* {data.hasOwnProperty("from") ? `${data.from}` : "-"} */}
         </span>
+        <span id="quote" className="transition-all">
+          {quoteData.hasOwnProperty("Global Quote") && quotePrice}
+        </span>
+        <span>{quoteData.hasOwnProperty("Global Quote") && quotePercent}</span>
+        <span>{quoteData.hasOwnProperty("Global Quote") && quoteChange}</span>
       </div>
-      {/* <div className="flex-row"> */}
-      <StockChart symbol={symbol} dataUrl={dataUrl} />
+      <div className="min-h-900">
+        <StockChart symbol={symbol} dataUrl={dataUrl} />
+      </div>
 
-      <div className="stock--details">
-        <span className="details-row">
+      <div className="flex flex-col">
+        <span className="flex justify-between">
           <span className="stock--details-name">Open:</span>
           <span>{data.hasOwnProperty("open") ? `$${data.open}` : "-"}</span>
         </span>
-        <span className="details-row">
+        <span className="flex justify-between">
           <span className="stock--details-name">Close:</span> <br />
           <span>{data.hasOwnProperty("close") ? `$${data.close}` : "-"}</span>
         </span>
-        <span className="details-row">
+        <span className="flex justify-between">
           <span className="stock--details-name">High:</span> <br />
           <span>{data.hasOwnProperty("high") ? `$${data.high}` : "-"}</span>
         </span>
-        <span className="details-row">
+        <span className="flex justify-between">
           <span className="stock--details-name">Low:</span> <br />
           <span>{data.hasOwnProperty("low") ? `$${data.low}` : "-"}</span>
         </span>
-        <span className="details-row">
+        <span className="flex justify-between">
           <span className="stock--details-name">Volume:</span> <br />
           <span>{data.hasOwnProperty("volume") ? data.volume : "-"}</span>
         </span>
