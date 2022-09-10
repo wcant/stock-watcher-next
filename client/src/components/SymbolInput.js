@@ -24,7 +24,7 @@ export default function SymbolInput(props) {
 
   return (
     <input
-      className="w-46 h-12 rounded-xl"
+      className="w-46 h-12 rounded-xl p-2"
       type="text"
       name="symbol"
       id="symbol-input"
