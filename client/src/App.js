@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import SymbolInput from "./components/SymbolInput";
+import GainersLosersTable from "./components/GainersLosersTable";
+import TickerInput from "./components/TickerInput";
 import CardContainer from "./components/CardContainer";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
@@ -7,14 +8,14 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 library.add(faCircleXmark);
 
 function App() {
-  const [url, setUrl] = useState(
+  const API_URL =
     process.env.NODE_ENV === "production"
       ? "https://stock-watcher-wcant.herokuapp.com/api"
-      : "http://localhost:4000/api"
-  );
+      : "http://localhost:4000/api";
 
-  const [symbols, setSymbols] = useState([]);
-  console.log(symbols);
+  const [tickers, setTickers] = useState([]);
+  console.log(tickers);
+
   // useEffect(() => {
   //   try {
   //     fetch(url, {
@@ -42,9 +43,14 @@ function App() {
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center">
         <h1 className="text-2xl font-bold text-white">Stock Watcher</h1>
-        <SymbolInput setSymbols={setSymbols} />
+        <TickerInput setTickers={setTickers} />
       </div>
-      <CardContainer symbols={symbols} setSymbols={setSymbols} dataUrl={url} />
+      <GainersLosersTable apiUrl={API_URL} />
+      <CardContainer
+        tickers={tickers}
+        setTickers={setTickers}
+        apiUrl={API_URL}
+      />
     </div>
   );
 }

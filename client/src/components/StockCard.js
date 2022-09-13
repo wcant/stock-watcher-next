@@ -1,10 +1,10 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StockChart from "./StockChart";
 
-const StockCard = memo(function StockCard(props) {
-  const { symbol, setSymbols, dataUrl } = props;
+export default function StockCard(props) {
+  const { ticker, setTickers, apiUrl } = props;
 
   const [data, setData] = useState({});
   const [quoteData, setQuoteData] = useState({});
@@ -12,7 +12,7 @@ const StockCard = memo(function StockCard(props) {
 
   async function getOpenCloseData() {
     try {
-      const response = await axios.get(dataUrl + `/day-open-close/${symbol}`);
+      const response = await axios.get(apiUrl + `/day-open-close/${ticker}`);
       setData(response.data);
     } catch (error) {
       console.log(error);
@@ -21,11 +21,8 @@ const StockCard = memo(function StockCard(props) {
 
   async function getQuote() {
     try {
-      console.log(dataUrl + `/quote/${symbol}`);
-      const response = await axios.get(dataUrl + `/quote/${symbol}`);
-      console.log(dataUrl + `/quote/${symbol}`);
+      const response = await axios.get(apiUrl + `/quote/${ticker}`);
       setQuoteData(response.data);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -36,14 +33,14 @@ const StockCard = memo(function StockCard(props) {
     getOpenCloseData();
   }, []);
 
-  useEffect(() => {
-    getQuote();
-    console.log("calling getQuote");
-    const interval = setInterval(() => {
-      getQuote();
-    }, 300000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   getQuote();
+  //   console.log("calling getQuote");
+  //   const interval = setInterval(() => {
+  //     getQuote();
+  //   }, 300000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // useEffect(() => {
   //   const quoteEl = document.querySelector("#quote");
@@ -51,12 +48,10 @@ const StockCard = memo(function StockCard(props) {
   //   setTimeout(() => quoteEl.classList.remove("animate-ping", 4000));
   // }, []);
 
-  console.log(`after useEffect in ${symbol}`);
-
   function handleDeleteCard() {
     console.log("clicked delete");
-    setSymbols((prevSymbols) => {
-      return prevSymbols.filter((prevSymbol) => prevSymbol !== symbol);
+    setTickers((prevTickers) => {
+      return prevTickers.filter((prevTicker) => prevTicker !== ticker);
     });
   }
 
@@ -83,19 +78,19 @@ const StockCard = memo(function StockCard(props) {
         <FontAwesomeIcon className="close-card-icon" icon="circle-xmark" />
       </span>
       <div className="stock--header">
-        <h2 className="text-3xl font-bold">{symbol}</h2>
+        <h2 className="text-3xl font-bold">{ticker}</h2>
         <span className="text-xs rounded-full bg-slate-100 px-2 py-1 font-light">
           Last Update: {Date().slice(0, 24)}
           {/* {data.hasOwnProperty("from") ? `${data.from}` : "-"} */}
         </span>
-        <span id="quote" className="transition-all">
+        {/* <span id="quote" className="transition-all">
           {quoteData.hasOwnProperty("Global Quote") && quotePrice}
         </span>
         <span>{quoteData.hasOwnProperty("Global Quote") && quotePercent}</span>
-        <span>{quoteData.hasOwnProperty("Global Quote") && quoteChange}</span>
+        <span>{quoteData.hasOwnProperty("Global Quote") && quoteChange}</span> */}
       </div>
       <div className="min-h-900">
-        <StockChart symbol={symbol} dataUrl={dataUrl} />
+        <StockChart ticker={ticker} apiUrl={apiUrl} />
       </div>
 
       <div className="flex flex-col">
@@ -123,6 +118,4 @@ const StockCard = memo(function StockCard(props) {
       {/* </div> */}
     </div>
   );
-});
-
-export default StockCard;
+}

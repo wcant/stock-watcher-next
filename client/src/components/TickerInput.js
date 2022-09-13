@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function SymbolInput(props) {
-  const { setSymbols } = props;
+  const { setTickers } = props;
 
   const [value, setValue] = useState("");
 
@@ -11,12 +11,12 @@ export default function SymbolInput(props) {
 
   function handleKeyUp(e) {
     if (e.key === "Enter") {
-      setSymbols((prevSymbols) => {
+      setTickers((prevTickers) => {
         // this prevents duplicates
         // could add something to popup a message that it's duplicate
-        return prevSymbols.includes(value)
-          ? [...prevSymbols]
-          : [...prevSymbols, value];
+        return prevTickers.includes(value)
+          ? [...prevTickers]
+          : [...prevTickers, value];
       });
       setValue("");
     }
