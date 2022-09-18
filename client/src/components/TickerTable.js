@@ -3,7 +3,7 @@ import TickerRow from "./TickerRow";
 
 export default function TickerTable(props) {
   const { headings, bodyRows, footerRows } = props;
-  console.log(`footerRows: ${footerRows}`);
+
   return (
     <table className="border-collapse w-full table-auto text-sm">
       {!!headings.length && (

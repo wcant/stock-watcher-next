@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import GainersLosersTable from "./components/GainersLosersTable";
 import TickerInput from "./components/TickerInput";
 import CardContainer from "./components/CardContainer";
+import MarketsSummary from "./components/MarketsSummary";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -42,8 +43,11 @@ function App() {
   return (
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center">
-        <h1 className="text-2xl font-bold text-white">Stock Watcher</h1>
+        <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
         <TickerInput setTickers={setTickers} />
+      </div>
+      <div className="bg-white">
+        <MarketsSummary apiUrl={API_URL} />
       </div>
       <GainersLosersTable apiUrl={API_URL} />
       <CardContainer

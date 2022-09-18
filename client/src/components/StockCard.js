@@ -73,7 +73,7 @@ export default function StockCard(props) {
 
   console.log(data);
   return (
-    <div className="flex flex-col justify-center  bg-white p-6 relative">
+    <div className="flex flex-col justify-center  bg-white p-6 relative rounded-xl">
       <span className="close-card-icon-bg" onClick={handleDeleteCard}>
         <FontAwesomeIcon className="close-card-icon" icon="circle-xmark" />
       </span>

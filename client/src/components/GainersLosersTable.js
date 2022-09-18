@@ -28,9 +28,7 @@ export default function GainersLosersTable(props) {
   useEffect(() => {
     async function getData() {
       try {
-        console.log(apiUrl + "/stocks/gainers");
         const response = await axios.get(apiUrl + "/stocks/gainers");
-        console.log(response.data);
         setGainers((prevGainers) => ({
           ...prevGainers,
           data: response.data.tickers,
@@ -41,7 +39,6 @@ export default function GainersLosersTable(props) {
       }
 
       try {
-        console.log(apiUrl + "/stocks/losers");
         const response = await axios.get(apiUrl + "/stocks/losers");
         setLosers((prevLosers) => ({
           ...prevLosers,
@@ -99,7 +96,6 @@ function extractObjsToArrays(arrayOfObjs, keys) {
         newArray.push(obj[key]);
       }
     }
-    console.log(newArray);
     return newArray;
   });
 }
