@@ -8,6 +8,7 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
+import moment from "moment";
 
 export default function MarketsSummary(props) {
   const { apiUrl } = props;
@@ -16,40 +17,45 @@ export default function MarketsSummary(props) {
     {
       value: "US",
       type: "stocks",
-      tickers: {
-        DIA: { price: null, change: null, percentChange: null },
-        SPY: { price: null, change: null, percentChange: null },
-        QQQ: { price: null, change: null, percentChange: null },
-        IWM: { price: null, change: null, percentChange: null },
-      },
+      tickers: ["DIA", "SPY", "QQQ", "IWM"],
     },
     {
       value: "Crypto",
       type: "crypto",
-      tickers: {
-        "X:BTCUSD": { price: null, change: null, percentChange: null },
-        "X:ETHUSD": { price: null, change: null, percentChange: null },
-        "X:LTCUSD": { price: null, change: null, percentChange: null },
-        "X:DOGEUSD": { price: null, change: null, percentChange: null },
-      },
+      tickers: ["BTC-USD", "ETH-USD", "LTC-USD", "DOGE-USD"],
     },
   ]);
 
-  async function getData(queryUrl) {
-    try {
-      const response = await axios.get(queryUrl);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
-    const newData = [...data];
-    Object.entries(newData.tickers).forEach((ticker) => {
-      const queryUrl = apiUrl + `/snapshot/${ticker}`;
-      const resData = getData(queryUrl);
-      console.log(resData);
+    const newData = [...data].map((market) => {
+      if (market.type === "stocks") {
+        for (const [key, value] of Object.entries(market.tickers)) {
+          const queryUrl = apiUrl + `/stocks/snapshot/${key}`;
+          const resData = getData(queryUrl);
+          console.log(resData);
+          market.tickers[key].price = resData["ticker"]["lastQuote"];
+          market.tickers[key].price = resData["ticker"]["todaysChange"];
+          market.tickers[key].price = resData["ticker"]["todaysChangePerc"];
+        }
+      }
+      if (market.type === "crypto") {
+        Object.entries(market.tickers).forEach((ticker) => {
+          const tickSplit = ticker.split("-");
+          const baseCurrency = tickSplit[0];
+          const quoteCurrency = tickSplit[1];
+          const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
+          const queryUrl =
+            apiUrl +
+            `/crypto/open-close/${baseCurrency}/${quoteCurrency}/${yesterday}`;
+          const resData = getData(queryUrl);
+          market.tickers[ticker].price = resData["close"];
+          market.tickers[ticker].price = resData["close"] - resData["open"];
+          market.tickers[ticker].price =
+            ((resData["close"] - resData["open"]) / resData["open"]) * 100;
+        });
+      }
+      console.log(market);
+      return market;
     });
   }, []);
 
@@ -67,39 +73,14 @@ export default function MarketsSummary(props) {
         ))}
       </TabsHeader>
       <TabsBody>
-        {data.map(({ value, tickers }) => (
+        {data.map(({ type, value, tickers }) => (
           <TabPanel key={value} value={value}>
-            {Object.entries(tickers).map(([key, value]) => (
-              <MiniTickerCard
-                key={key}
-                ticker={key}
-                price={value.price}
-                change={value.change}
-                percentChange={value.percentChange}
-              />
+            {tickers.map((ticker) => (
+              <MiniTickerCard key={ticker} ticker={ticker} type={type} />
             ))}
           </TabPanel>
         ))}
       </TabsBody>
     </Tabs>
   );
-}
-{
-  /* <div>
-<div role="tablist" tabindex="0">
-  <div role="tab" tabindex="0" data-label="us" aria-selected="true">
-    US
-  </div>
-  <div role="tab" tabindex="0" data-label="europe" aria-selected="false">
-    Europe
-  </div>
-  <div role="tab" tabindex="0" data-label="asia" aria-selected="false">
-    Asia
-  </div>
-  <div role="tab" tabindex="0" data-label="crypto" aria-selected="false">
-    Crypto
-  </div>
-</div>
-<div></div>
-</div> */
 }

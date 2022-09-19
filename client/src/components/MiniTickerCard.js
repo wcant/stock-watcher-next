@@ -1,5 +1,14 @@
 export default function MiniCard(props) {
-  const { ticker, price, change, percentChange } = props;
+  const { ticker } = props;
+  // { price: null, change: null, percentChange: null }
+
+  async function getData(queryUrl) {
+    try {
+      const response = await axios.get(queryUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <div className="flex flex-row border rounded-xl p-2">
       <div>
