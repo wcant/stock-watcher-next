@@ -10,15 +10,6 @@ export default function StockCard(props) {
   const [quoteData, setQuoteData] = useState({});
   const [updateTime, setUpdateTime] = useState("");
 
-  async function getOpenCloseData() {
-    try {
-      const response = await axios.get(apiUrl + `/day-open-close/${ticker}`);
-      setData(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   async function getQuote() {
     try {
       const response = await axios.get(apiUrl + `/quote/${ticker}`);
@@ -29,7 +20,14 @@ export default function StockCard(props) {
   }
 
   useEffect(() => {
-    console.log("calling getOpenCloseData");
+    async function getOpenCloseData() {
+      try {
+        const response = await axios.get(apiUrl + `/day-open-close/${ticker}`);
+        setData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     getOpenCloseData();
   }, []);
 

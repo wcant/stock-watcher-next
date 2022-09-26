@@ -13,73 +13,102 @@ import moment from "moment";
 export default function MarketsSummary(props) {
   const { apiUrl } = props;
 
-  const [data, setData] = useState([
-    {
-      value: "US",
-      type: "stocks",
-      tickers: ["DIA", "SPY", "QQQ", "IWM"],
+  const [data, setData] = useState({
+    value: "US",
+    type: "stocks",
+    tickers: {
+      DIA: { price: null, change: null, percentChange: null },
+      SPY: { price: null, change: null, percentChange: null },
+      QQQ: { price: null, change: null, percentChange: null },
+      IWM: { price: null, change: null, percentChange: null },
     },
-    {
-      value: "Crypto",
-      type: "crypto",
-      tickers: ["BTC-USD", "ETH-USD", "LTC-USD", "DOGE-USD"],
-    },
-  ]);
+  });
 
   useEffect(() => {
-    const newData = [...data].map((market) => {
-      if (market.type === "stocks") {
-        for (const [key, value] of Object.entries(market.tickers)) {
-          const queryUrl = apiUrl + `/stocks/snapshot/${key}`;
-          const resData = getData(queryUrl);
-          console.log(resData);
-          market.tickers[key].price = resData["ticker"]["lastQuote"];
-          market.tickers[key].price = resData["ticker"]["todaysChange"];
-          market.tickers[key].price = resData["ticker"]["todaysChangePerc"];
-        }
-      }
-      if (market.type === "crypto") {
-        Object.entries(market.tickers).forEach((ticker) => {
-          const tickSplit = ticker.split("-");
-          const baseCurrency = tickSplit[0];
-          const quoteCurrency = tickSplit[1];
-          const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
-          const queryUrl =
-            apiUrl +
-            `/crypto/open-close/${baseCurrency}/${quoteCurrency}/${yesterday}`;
-          const resData = getData(queryUrl);
-          market.tickers[ticker].price = resData["close"];
-          market.tickers[ticker].price = resData["close"] - resData["open"];
-          market.tickers[ticker].price =
-            ((resData["close"] - resData["open"]) / resData["open"]) * 100;
+    async function getData(queryUrl) {
+      try {
+        const response = await axios.get(queryUrl);
+        const { todaysChange, todaysChangePerc, min, ticker } =
+          response.data.ticker;
+
+        setData((prevData) => {
+          return {
+            ...prevData,
+            tickers: {
+              ...prevData.tickers,
+              [ticker]: {
+                price: min.c,
+                change: todaysChange,
+                percentChange: todaysChangePerc,
+              },
+            },
+          };
         });
+      } catch (error) {
+        console.log(error);
       }
-      console.log(market);
-      return market;
-    });
+    }
+
+    for (const key of Object.keys(data.tickers)) {
+      const queryUrl = apiUrl + `/stocks/snapshot/${key}`;
+      getData(queryUrl);
+    }
   }, []);
 
-  useEffect(() => {
-    // const newData =
-  }, []);
+  //   if (market.type === "crypto") {
+  //     Object.entries(market.tickers).forEach((ticker) => {
+  //       const tickSplit = ticker.split("-");
+  //       const baseCurrency = tickSplit[0];
+  //       const quoteCurrency = tickSplit[1];
+  //       const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
+  //       const queryUrl =
+  //         apiUrl +
+  //         `/crypto/open-close/${baseCurrency}/${quoteCurrency}/${yesterday}`;
+  //       const resData = getData(queryUrl);
+  //       market.tickers[ticker].price = resData["close"];
+  //       market.tickers[ticker].price = resData["close"] - resData["open"];
+  //       market.tickers[ticker].price =
+  //         ((resData["close"] - resData["open"]) / resData["open"]) * 100;
+  //     });
+  //   }
+
+  function createMiniTickerCards(tickers) {
+    const tabPanels = [];
+    for (const [key, value] of Object.entries(tickers)) {
+      tabPanels.push(
+        <MiniTickerCard
+          key={key}
+          ticker={key}
+          price={value.price}
+          change={value.change}
+          percentChange={value.percentChange}
+        />
+      );
+    }
+    return tabPanels;
+  }
+
+  const tabPanelElements = createMiniTickerCards(data.tickers);
 
   return (
-    <Tabs value="us" className="">
+    <Tabs
+      value="us"
+      id="tabs"
+      className="border-blue-gray-50 grid min-h-[140px] w-full scroll-mt-48 place-items-center overflow-x-scroll rounded-lg border bg-[#f8fafc] p-6 lg:overflow-visible"
+    >
       <TabsHeader className="">
-        {data.map(({ value }) => (
-          <Tab key={value} value={value} className="">
-            {value}
-          </Tab>
-        ))}
+        <Tab
+          key={data.value}
+          value={data.value}
+          className="text-left inline-block"
+        >
+          {data.value}
+        </Tab>
       </TabsHeader>
       <TabsBody>
-        {data.map(({ type, value, tickers }) => (
-          <TabPanel key={value} value={value}>
-            {tickers.map((ticker) => (
-              <MiniTickerCard key={ticker} ticker={ticker} type={type} />
-            ))}
-          </TabPanel>
-        ))}
+        <TabPanel key={data.value} value={data.value}>
+          {tabPanelElements}
+        </TabPanel>
       </TabsBody>
     </Tabs>
   );
