@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StockChart from "./StockChart";
+import StockChart from "components/StockChart";
 
 export default function StockCard(props) {
   const { ticker, setTickers, apiUrl } = props;

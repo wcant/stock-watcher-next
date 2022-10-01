@@ -1,4 +1,4 @@
-import StockCard from "./StockCard";
+import StockCard from "components/StockCard";
 
 export default function CardContainer(props) {
   const { tickers, setTickers, apiUrl } = props;

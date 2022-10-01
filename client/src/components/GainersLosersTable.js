@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import TickerTable from "./TickerTable";
+import TickerTable from "components/TickerTable";
 import axios from "axios";
 
 export default function GainersLosersTable(props) {
   const { apiUrl } = props;
-
+  const DELAY_15_MINUTES = 900000;
   const headings = ["Ticker", "Last", "Change", "Change %", "Volume"];
   const keysToExtract = [
     "ticker",
@@ -53,7 +53,7 @@ export default function GainersLosersTable(props) {
     getData();
     const interval = setInterval(() => {
       getData();
-    }, 900000);
+    }, DELAY_15_MINUTES);
 
     return () => clearInterval(interval);
   }, []);
@@ -61,7 +61,7 @@ export default function GainersLosersTable(props) {
   return (
     <div
       className="grid grid-cols-2 p-4
-    mt-6 mb-6 rounded-xl overflow-auto bg-white text-center"
+    mt-6 mb-6 rounded-lg overflow-auto bg-white text-center"
     >
       <div>
         <h2 className="font-semibold">Top Gainers</h2>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import MiniTickerCard from "./MiniTickerCard";
-import axios from "axios";
+import MiniTickerCard from "components/MiniTickerCard";
+
+// import useApiRequest from "../hooks/useApiRequest";
 import {
   Tabs,
   TabsHeader,
@@ -8,7 +9,8 @@ import {
   Tab,
   TabPanel,
 } from "@material-tailwind/react";
-import moment from "moment";
+import axios from "axios";
+import useApiRequest from "../hooks/useApiRequest";
 
 export default function MarketsSummary(props) {
   const { apiUrl } = props;
@@ -91,25 +93,27 @@ export default function MarketsSummary(props) {
   const tabPanelElements = createMiniTickerCards(data.tickers);
 
   return (
-    <Tabs
-      value="us"
-      id="tabs"
-      className="border-blue-gray-50 grid min-h-[140px] w-full scroll-mt-48 place-items-center overflow-x-scroll rounded-lg border bg-[#f8fafc] p-6 lg:overflow-visible"
-    >
-      <TabsHeader className="">
-        <Tab
-          key={data.value}
-          value={data.value}
-          className="text-left inline-block"
-        >
-          {data.value}
-        </Tab>
-      </TabsHeader>
-      <TabsBody>
-        <TabPanel key={data.value} value={data.value}>
-          {tabPanelElements}
-        </TabPanel>
-      </TabsBody>
-    </Tabs>
+    <div className="bg-white rounded-lg">
+      <Tabs
+        value="US"
+        id="tabs"
+        // className="border-blue-gray-50 grid min-h-[140px] w-full scroll-mt-48 overflow-x-scroll rounded-lg border bg-[#babdbf8f] p-2 lg:overflow-visible"
+      >
+        <TabsHeader className="pl-6 flex flex-row items-start">
+          <Tab key={data.value} value={data.value} className="">
+            {data.value}
+          </Tab>
+        </TabsHeader>
+        <TabsBody>
+          <TabPanel
+            key={data.value}
+            value={data.value}
+            className="flex flex-row overflow-x-scroll"
+          >
+            {tabPanelElements}
+          </TabPanel>
+        </TabsBody>
+      </Tabs>
+    </div>
   );
 }

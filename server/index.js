@@ -12,7 +12,8 @@ const POLYGON_API_KEY = process.env.POLYGON_API_KEY;
 
 const app = express();
 
-const POLY_API = `https://api.polygon.io/v2`;
+const POLY_API_V1 = `https://api.polygon.io/v1`;
+const POLY_API_V2 = `https://api.polygon.io/v2`;
 
 const dataDir = __dirname + "/data";
 const openClose = require(dataDir + "/day-open-close.json");
@@ -97,11 +98,54 @@ app.get("/api/stocks/:direction", async (req, res) => {
   const { direction } = req.params;
   try {
     const response = await axios.get(
-      POLY_API +
+      POLY_API_V2 +
         `/snapshot/locale/us/markets/stocks/${direction}?apiKey=${POLYGON_API_KEY}`
     );
 
     res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/stocks/snapshot/:symbol", async (req, res) => {
+  const { symbol } = req.params;
+  try {
+    const response = await axios.get(
+      POLY_API_V2 +
+        `/snapshot/locale/us/markets/stocks/tickers/${symbol}?apiKey=${POLYGON_API_KEY}`
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get(
+  "/api/crypto/open-close/:baseCurrency/:quoteCurrency/:date",
+  async (req, res) => {
+    // date is YYYY-MM-DD
+    const { baseCurrency, quoteCurrency, date } = req.params;
+    try {
+      const response = await axios.get(
+        POLY_API_V1 +
+          `/open-close/crypto/${baseCurrency}/${quoteCurrency}/${date}?adjusted=true&apiKey=${POLYGON_API_KEY}`
+      );
+
+      res.json(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+app.get("/api/forex/:forexPair/prev-close", async (req, res) => {
+  const { forexPair } = req.params;
+  try {
+    const reponse = await axios.get(
+      POLY_API_V2 + `/aggs/ticker/${forexPair}/prev`
+    );
   } catch (error) {
     console.log(error);
   }

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import GainersLosersTable from "./components/GainersLosersTable";
-import TickerInput from "./components/TickerInput";
-import CardContainer from "./components/CardContainer";
-import MarketsSummary from "./components/MarketsSummary";
+import GainersLosersTable from "components/GainersLosersTable";
+import TickerInput from "components/TickerInput";
+import CardContainer from "components/CardContainer";
+import MarketsSummary from "components/MarketsSummary";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleXmark,
+  faArrowUp,
+  faArrowDown,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faCircleXmark);
+library.add(faCircleXmark, faArrowUp, faArrowDown);
 
 function App() {
   const API_URL =
@@ -15,7 +19,6 @@ function App() {
       : "http://localhost:4000/api";
 
   const [tickers, setTickers] = useState([]);
-  console.log(tickers);
 
   // useEffect(() => {
   //   try {
@@ -42,13 +45,11 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center p-4">
-      <div className="grid grid-cols-3 items-center">
+      <div className="grid grid-cols-3 items-center pb-4">
         <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
         <TickerInput setTickers={setTickers} />
       </div>
-      <div className="bg-white">
-        <MarketsSummary apiUrl={API_URL} />
-      </div>
+      <MarketsSummary apiUrl={API_URL} />
       <GainersLosersTable apiUrl={API_URL} />
       <CardContainer
         tickers={tickers}

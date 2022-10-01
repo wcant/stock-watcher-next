@@ -1,5 +1,5 @@
-import TickerCategoryRow from "./TickerCategoryRow";
-import TickerRow from "./TickerRow";
+import TickerCategoryRow from "components/TickerCategoryRow";
+import TickerRow from "components/TickerRow";
 
 export default function TickerTable(props) {
   const { headings, bodyRows, footerRows } = props;
