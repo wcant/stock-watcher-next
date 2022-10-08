@@ -81,19 +81,6 @@ app.get("/api/intraday/:symbol", async (req, res) => {
   if (!res.headersSent) res.json({ message: "Symbol data not available." });
 });
 
-app.get("/api/quote/:symbol", async (req, res) => {
-  const { symbol } = req.params;
-  try {
-    const quoteResponse = await axios.get(
-      quoteUrl + `&symbol=${symbol}&apikey=${ALPHA_API_KEY}`
-    );
-    res.json(quoteResponse.data);
-  } catch (error) {
-    console.log(error);
-  }
-  if (!res.headersSent) res.json({ message: "Symbol data not available." });
-});
-
 app.get("/api/stocks/:direction", async (req, res) => {
   const { direction } = req.params;
   try {
@@ -151,9 +138,24 @@ app.get("/api/forex/:forexPair/prev-close", async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+// Market Status
+// when = "upcoming" -> upcoming market holidays
+// when = "now" -> current status
+app.get("/api/marketstatus/:when", async (req, res) => {
+  const { when } = req.params;
+  try {
+    const response = await axios.get(
+      POLY_API_V1 + `/marketstatus/${when}?apiKey=${POLYGON_API_KEY}`
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
 });
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+// });
 
 app.listen(PORT, () => {
   console.log(`API listening on ${PORT}`);

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import GainersLosersTable from "components/GainersLosersTable";
 import TickerInput from "components/TickerInput";
 import CardContainer from "components/CardContainer";
-import MarketsSummary from "components/MarketsSummary";
+import MarketsSummaryTabs from "components/MarketsSummaryTabs";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
   faArrowUp,
   faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
+import MarketHolidays from "components/MarketHolidays";
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
@@ -49,8 +50,11 @@ function App() {
         <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
         <TickerInput setTickers={setTickers} />
       </div>
-      <MarketsSummary apiUrl={API_URL} />
-      <GainersLosersTable apiUrl={API_URL} />
+      <MarketsSummaryTabs apiUrl={API_URL} />
+      <div className="flex flex-row gap-6">
+        <GainersLosersTable apiUrl={API_URL} />
+        <MarketHolidays apiUrl={API_URL} />
+      </div>
       <CardContainer
         tickers={tickers}
         setTickers={setTickers}

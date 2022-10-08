@@ -2,7 +2,6 @@ import ArrowChangeBox from "components/ArrowChangeBox";
 
 export default function MiniTickerCard(props) {
   const { ticker, price, change, percentChange } = props;
-
   const isUp = parseFloat(change) > 0;
 
   return (

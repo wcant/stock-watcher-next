@@ -1,9 +1,15 @@
+// Issues:
+// - Tickers with zero volume and high % changes tend to populate the results of this query
+//    would be nice to be able to filter by market cap and maybe just don't include results
+//    with zero volume (or other weird data)
+
 import { useState, useEffect } from "react";
 import TickerTable from "components/TickerTable";
 import axios from "axios";
 
 export default function GainersLosersTable(props) {
   const { apiUrl } = props;
+  const DELAY_1_MINUTE = 60000;
   const DELAY_15_MINUTES = 900000;
   const headings = ["Ticker", "Last", "Change", "Change %", "Volume"];
   const keysToExtract = [
@@ -91,9 +97,18 @@ function extractObjsToArrays(arrayOfObjs, keys) {
     // for traversing an object of arbitrary depth
     for (const key of keys) {
       if (typeof key === "object" && key !== null) {
-        newArray.push(obj[key[0]][key[1]]);
+        // check if is number and set toFixed(2)
+        const value = obj[key[0]][key[1]];
+        if (typeof value === "number") {
+          newArray.push(value.toFixed(2));
+        } else newArray.push(obj[key[0]][key[1]]);
       } else {
-        newArray.push(obj[key]);
+        const value = obj[key];
+        if (typeof value === "number") {
+          newArray.push(value.toFixed(2));
+        } else {
+          newArray.push(value);
+        }
       }
     }
     return newArray;

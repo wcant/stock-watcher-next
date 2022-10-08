@@ -73,4 +73,9 @@ function collectDataToArrays(startTime, endTime, interval, data) {
   return trace;
 }
 
-export { collectDataToArrays };
+function isNumeric(str) {
+  if (typeof str !== "string") return false;
+  return !isNaN(str) && !isNaN(parseFloat(str));
+}
+
+export { collectDataToArrays, isNumeric };
