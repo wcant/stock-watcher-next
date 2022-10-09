@@ -1,6 +1,31 @@
+export function convertNumMonthToName(num) {
+  const months = {
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "Apr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dev",
+  };
+
+  return months[num];
+}
+
+export function isNumeric(str) {
+  if (typeof str !== "string") return false;
+  return !isNaN(str) && !isNaN(parseFloat(str));
+}
+
 // ---------------------------------
 // AlphaVantage
 // ---------------------------------
+
 // Data format
 // "Time Series (5min)": {
 //      "2022-08-31 20:00:00": {
@@ -19,7 +44,7 @@
 // startTime, endTime format: HH:MM:SS
 // interval units: minutes
 // data is in EST, so market opens at 09:30:00 and closes at 16:00:00
-function collectDataToArrays(startTime, endTime, interval, data) {
+export function collectDataToArrays(startTime, endTime, interval, data) {
   const date = data["Meta Data"]["3. Last Refreshed"].slice(0, 10);
   const startHour = parseInt(startTime.slice(0, 2));
   const startMinute = parseInt(startTime.slice(3, 5));
@@ -72,10 +97,3 @@ function collectDataToArrays(startTime, endTime, interval, data) {
 
   return trace;
 }
-
-function isNumeric(str) {
-  if (typeof str !== "string") return false;
-  return !isNaN(str) && !isNaN(parseFloat(str));
-}
-
-export { collectDataToArrays, isNumeric };

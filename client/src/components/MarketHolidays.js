@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { convertNumMonthToName } from "utils";
 
 function DateBox(props) {
   const { month, day } = props;
@@ -12,20 +13,30 @@ function DateBox(props) {
 }
 
 function EventItem(props) {
-  const { name, date, time } = props;
+  const { name, date, time, month, day, desc } = props;
   return (
     <div className="flex flex-row">
-      <DateBox month={"Oct"} day={12} />
+      {month && day && <DateBox month={month} day={day} />}
       <div className="flex flex-row">
         <div className="flex flex-col self-start px-2">
-          <span className="font-semibold">{name}</span>
+          {name && <span className="font-semibold">{name}</span>}
           <span>
-            {date}
-            <span className="px-2">{time && time}</span>
+            {date && <span>{date}</span>}
+            {time && <span className="px-2">{time}</span>}
           </span>
         </div>
+        <div>{desc}</div>
       </div>
     </div>
+  );
+}
+
+function createHolidayEventItems(data) {
+  const month = convertNumMonthToName(data.date.slice(5, 8));
+  const day = data.date.slice(8);
+  const description = `Status: ${data.status}`;
+  return (
+    <EventItem name={data.name} month={month} day={day} desc={description} />
   );
 }
 
@@ -49,7 +60,13 @@ export default function MarketHolidays(props) {
       <div>
         <h2>Market Holidays</h2>
       </div>
-      <EventItem name="Test Co, Inc." date="Oct 12, 2024" time="12:00 PM" />
+      <EventItem
+        name="Test Co, Inc."
+        date="Oct 12, 2024"
+        time="12:00 PM"
+        month="Oct"
+        day="12"
+      />
     </div>
   );
 }
