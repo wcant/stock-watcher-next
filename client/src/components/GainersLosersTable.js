@@ -67,7 +67,7 @@ export default function GainersLosersTable(props) {
   return (
     <div
       className="grid grid-cols-2 p-4
-    mt-6 mb-6 rounded-lg overflow-auto bg-white text-center"
+    mt-4 mb-4 rounded-lg overflow-auto bg-white text-center"
     >
       <div>
         <h2 className="font-semibold">Top Gainers</h2>

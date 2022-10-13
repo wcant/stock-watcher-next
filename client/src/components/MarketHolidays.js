@@ -25,16 +25,20 @@ function EventItem(props) {
             {time && <span className="px-2">{time}</span>}
           </span>
         </div>
-        <div>{desc}</div>
+        <div>
+          <p>{desc}</p>
+        </div>
       </div>
     </div>
   );
 }
 
 function createHolidayEventItems(data) {
-  const month = convertNumMonthToName(data.date.slice(5, 8));
+  const month = convertNumMonthToName(data.date.slice(5, 7));
   const day = data.date.slice(8);
-  const description = `Status: ${data.status}`;
+  const description = `Status: ${data.status}${
+    data.open && `, Open: ${data.open.split("T")[1].slice(0, 8)}`
+  }${data.close && `, Close: ${data.close.split("T")[1].slice(0, 8)}`}`;
   return (
     <EventItem name={data.name} month={month} day={day} desc={description} />
   );
@@ -56,17 +60,12 @@ export default function MarketHolidays(props) {
   }, []);
 
   return (
-    <div className="bg-white p-2 flex flex-col overflow-y-scroll">
-      <div>
-        <h2>Market Holidays</h2>
+    <div className="bg-white p-2 mt-4 mb-4 flex flex-col overflow-y-scroll rounded-lg h-1/2">
+      <div className="p-2">
+        <h2 className="text-xl font-semibold">Market Holidays</h2>
+        <hr />
       </div>
-      <EventItem
-        name="Test Co, Inc."
-        date="Oct 12, 2024"
-        time="12:00 PM"
-        month="Oct"
-        day="12"
-      />
+      {holidays.map((holiday) => createHolidayEventItems(holiday))}
     </div>
   );
 }

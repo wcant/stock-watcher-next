@@ -125,7 +125,7 @@ export default function MarketsSummary(props) {
         <TabsHeader>
           {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
             return (
-              <Tab key={market.label} label={market.label} className="">
+              <Tab key={market.label} label={market.label}>
                 {market.label}
               </Tab>
             );

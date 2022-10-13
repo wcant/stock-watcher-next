@@ -48,12 +48,14 @@ function App() {
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center pb-4">
         <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
-        <TickerInput setTickers={setTickers} />
+        <TickerInput setTickers={setTickers} apiUrl={API_URL} />
       </div>
       <MarketsSummaryTabs apiUrl={API_URL} />
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-row gap-4">
         <GainersLosersTable apiUrl={API_URL} />
-        <MarketHolidays apiUrl={API_URL} />
+        <div className="max-h-min">
+          <MarketHolidays apiUrl={API_URL} />
+        </div>
       </div>
       <CardContainer
         tickers={tickers}
