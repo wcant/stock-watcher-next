@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GainersLosersTable from "components/GainersLosersTable";
 import TickerInput from "components/TickerInput";
 import CardContainer from "components/CardContainer";
 import MarketsSummaryTabs from "components/MarketsSummaryTabs";
+import MarketHolidays from "components/MarketHolidays";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
   faArrowUp,
   faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
-import MarketHolidays from "components/MarketHolidays";
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
@@ -20,29 +20,6 @@ function App() {
       : "http://localhost:4000/api";
 
   const [tickers, setTickers] = useState([]);
-
-  // useEffect(() => {
-  //   try {
-  //     fetch(url, {
-  //       json: true,
-  //       headers: { "User-Agent": "request" },
-  //     })
-  //       .then((res) => {
-  //         if (res.status !== 200) {
-  //           console.log("Status:", res.status);
-  //         } else {
-  //           // data is successfully parsed as a JSON object:
-  //           return res.json();
-  //         }
-  //       })
-  //       .then((data) => {
-  //         console.log(data);
-  //         setData(data);
-  //       });
-  //   } catch (error) {
-  //     console.log("Error:", error);
-  //   }
-  // }, []);
 
   return (
     <div className="flex flex-col justify-center p-4">
@@ -67,3 +44,26 @@ function App() {
 }
 
 export default App;
+
+// useEffect(() => {
+//   try {
+//     fetch(url, {
+//       json: true,
+//       headers: { "User-Agent": "request" },
+//     })
+//       .then((res) => {
+//         if (res.status !== 200) {
+//           console.log("Status:", res.status);
+//         } else {
+//           // data is successfully parsed as a JSON object:
+//           return res.json();
+//         }
+//       })
+//       .then((data) => {
+//         console.log(data);
+//         setData(data);
+//       });
+//   } catch (error) {
+//     console.log("Error:", error);
+//   }
+// }, []);

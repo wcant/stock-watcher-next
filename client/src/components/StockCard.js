@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import StockChart from "components/StockChart";
+import { API_URL } from "utils/constants";
 
 export default function StockCard(props) {
-  const { ticker, setTickers, apiUrl } = props;
+  const { ticker, setTickers } = props;
 
   const [data, setData] = useState({});
   const [quoteData, setQuoteData] = useState({});
@@ -12,7 +13,7 @@ export default function StockCard(props) {
 
   async function getQuote() {
     try {
-      const response = await axios.get(apiUrl + `/quote/${ticker}`);
+      const response = await axios.get(API_URL + `/quote/${ticker}`);
       setQuoteData(response.data);
     } catch (error) {
       console.log(error);
@@ -22,7 +23,7 @@ export default function StockCard(props) {
   useEffect(() => {
     async function getOpenCloseData() {
       try {
-        const response = await axios.get(apiUrl + `/day-open-close/${ticker}`);
+        const response = await axios.get(API_URL + `/day-open-close/${ticker}`);
         setData(response.data);
       } catch (error) {
         console.log(error);
@@ -88,7 +89,7 @@ export default function StockCard(props) {
         <span>{quoteData.hasOwnProperty("Global Quote") && quoteChange}</span> */}
       </div>
       <div className="min-h-900">
-        <StockChart ticker={ticker} apiUrl={apiUrl} />
+        <StockChart ticker={ticker} API_URL={API_URL} />
       </div>
 
       <div className="flex flex-col">

@@ -1,4 +1,4 @@
-export function convertNumMonthToName(num) {
+export function convertNumMonthToAbbrev(num) {
   const months = {
     1: "Jan",
     2: "Feb",
@@ -11,7 +11,7 @@ export function convertNumMonthToName(num) {
     9: "Sep",
     10: "Oct",
     11: "Nov",
-    12: "Dev",
+    12: "Dec",
   };
 
   return months[num];

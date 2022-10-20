@@ -1,19 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "utils/constants";
 
 function ResultsItem(props) {
   const { ticker, name, locale, exchange } = props;
-
-  const [isHovered, setIsHovered] = useState(false);
-
-  function toggleHover() {
-    setIsHovered((prevIsHovered) => !prevIsHovered);
-  }
   return (
-    <div
-      role="option"
-      className="flex flex-col p-2 z-50 hover:bg-gray-300 max-w-xs"
-    >
+    <div className="flex flex-col p-2 z-50 hover:bg-gray-300 max-w-xs">
       <span className="text-sm truncate">{name}</span>
       <span className="text-xs">
         <span className="font-semibold">{ticker}</span> : {exchange} ({locale})
@@ -23,7 +15,7 @@ function ResultsItem(props) {
 }
 
 export default function TickerInput(props) {
-  const { setTickers, apiUrl } = props;
+  const { setTickers, API_URL } = props;
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [search, setSearch] = useState("");
@@ -32,13 +24,15 @@ export default function TickerInput(props) {
 
   const dropdown = useRef(null);
 
+  // handle input changes
   async function handleChange(e) {
     const inputStr = e.target.value.toUpperCase();
     setSearch(inputStr);
 
+    // populates dropdown with first 5 tickers matching inputStr
     if (inputStr) {
       const response = await axios.get(
-        apiUrl + `/reference/tickers/${inputStr}/5`
+        API_URL + `/reference/tickers/${inputStr}/5`
       );
       const results = response.data.results.map((result) => [
         result.ticker,
@@ -48,13 +42,14 @@ export default function TickerInput(props) {
       ]);
       setResults(results);
       setShowDropdown(true);
-      // clear results when input is cleared
     } else {
+      // clear results when input is cleared/empty
       setResults([]);
       setShowDropdown(false);
     }
   }
 
+  // handles populating TickerCards
   function handleKeyUp(e) {
     if (e.key === "Enter") {
       setTickers((prevTickers) => {
@@ -72,13 +67,14 @@ export default function TickerInput(props) {
     }
   }
 
-  const handleUserClick = useCallback(
-    (e) => {
+  useEffect(() => {
+    const handleUserClick = (e) => {
       if (
         dropdown.current &&
         showDropdown &&
         !dropdown.current.contains(e.target)
       ) {
+        // if clicked outside dropdown, then hide it
         setShowDropdown(false);
       } else if (
         search.length > 0 &&
@@ -86,16 +82,13 @@ export default function TickerInput(props) {
         !showDropdown &&
         dropdown.current.contains(e.target)
       ) {
+        // if dropdown is clicked after being hidden, then show if input isn't empty
         setShowDropdown(true);
       }
-    },
-    [showDropdown, search]
-  );
-
-  useEffect(() => {
+    };
     document.addEventListener("mousedown", handleUserClick);
     return () => document.removeEventListener("mousedown", handleUserClick);
-  }, [handleUserClick]);
+  }, [search, showDropdown]);
 
   return (
     <div ref={dropdown} className="relative">

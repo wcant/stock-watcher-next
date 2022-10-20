@@ -4,14 +4,7 @@ export default function CardContainer(props) {
   const { tickers, setTickers, apiUrl } = props;
 
   function makeStockCards(ticker, index) {
-    return (
-      <StockCard
-        key={ticker}
-        ticker={ticker}
-        setTickers={setTickers}
-        apiUrl={apiUrl}
-      />
-    );
+    return <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />;
   }
 
   return (

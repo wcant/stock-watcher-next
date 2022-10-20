@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import MiniTickerCard from "components/MiniTickerCard";
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "components/Tabs";
 import axios from "axios";
-
-const DELAY_1_MINUTES = 60000;
+import { DELAY_1_MINUTE, API_URL } from "utils/constants";
 
 function createMiniTickerCards(tickers) {
   const tabPanels = [];
@@ -22,8 +21,6 @@ function createMiniTickerCards(tickers) {
 }
 
 export default function MarketsSummary(props) {
-  const { apiUrl } = props;
-
   // US data is the only one that's live at the moment due to API limitations
   const [usData, setUsData] = useState({
     label: "US",
@@ -83,7 +80,7 @@ export default function MarketsSummary(props) {
   useEffect(() => {
     async function getUsData() {
       const endpoints = Object.keys(usData.tickers).map((ticker) => {
-        return apiUrl + `/stocks/snapshot/${ticker}`;
+        return API_URL + `/stocks/snapshot/${ticker}`;
       });
 
       Promise.all(
@@ -112,7 +109,7 @@ export default function MarketsSummary(props) {
 
     const interval = setInterval(() => {
       getUsData();
-    }, DELAY_1_MINUTES);
+    }, DELAY_1_MINUTE);
 
     getUsData();
 
@@ -153,7 +150,7 @@ export default function MarketsSummary(props) {
 //       const quoteCurrency = tickSplit[1];
 //       const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
 //       const queryUrl =
-//         apiUrl +
+//         API_URL +
 //         `/crypto/open-close/${baseCurrency}/${quoteCurrency}/${yesterday}`;
 //       const resData = getData(queryUrl);
 //       market.tickers[ticker].price = resData["close"];

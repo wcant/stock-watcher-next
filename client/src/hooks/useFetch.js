@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function useApiRequest(url) {
+export default function useFetch(url) {
   const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
@@ -10,8 +10,8 @@ export default function useApiRequest(url) {
     async function fetchData() {
       try {
         const response = await axios.get(url);
-        setIsLoaded(true);
         setData(response.data);
+        setIsLoaded(true);
       } catch (error) {
         setError(error);
       }
@@ -19,5 +19,5 @@ export default function useApiRequest(url) {
     fetchData();
   }, [url]);
 
-  return { error, isLoaded, data };
+  return { data, isLoaded, error };
 }

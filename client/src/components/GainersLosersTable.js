@@ -6,11 +6,9 @@
 import { useState, useEffect } from "react";
 import TickerTable from "components/TickerTable";
 import axios from "axios";
+import { DELAY_1_MINUTE, DELAY_15_MINUTES, API_URL } from "utils/constants";
 
 export default function GainersLosersTable(props) {
-  const { apiUrl } = props;
-  const DELAY_1_MINUTE = 60000;
-  const DELAY_15_MINUTES = 900000;
   const headings = ["Ticker", "Last", "Change", "Change %", "Volume"];
   const keysToExtract = [
     "ticker",
@@ -34,7 +32,7 @@ export default function GainersLosersTable(props) {
   useEffect(() => {
     async function getData() {
       try {
-        const response = await axios.get(apiUrl + "/stocks/gainers");
+        const response = await axios.get(API_URL + "/stocks/gainers");
         setGainers((prevGainers) => ({
           ...prevGainers,
           data: response.data.tickers,
@@ -45,7 +43,7 @@ export default function GainersLosersTable(props) {
       }
 
       try {
-        const response = await axios.get(apiUrl + "/stocks/losers");
+        const response = await axios.get(API_URL + "/stocks/losers");
         setLosers((prevLosers) => ({
           ...prevLosers,
           data: response.data.tickers,

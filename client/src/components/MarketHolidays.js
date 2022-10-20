@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { convertNumMonthToName } from "utils";
+import { convertNumMonthToAbbrev } from "utils";
+import { API_URL } from "utils/constants";
 
 function DateBox(props) {
   const { month, day } = props;
@@ -12,14 +13,17 @@ function DateBox(props) {
   );
 }
 
-function EventItem(props) {
-  const { name, date, time, month, day, desc } = props;
+function EventRowItem(props) {
+  const { title, subtitle, date, time, month, day, desc } = props;
   return (
     <div className="flex flex-row">
       {month && day && <DateBox month={month} day={day} />}
       <div className="flex flex-row">
         <div className="flex flex-col self-start px-2">
-          {name && <span className="font-semibold">{name}</span>}
+          {title && <span className="font-semibold">{title}</span>}
+          {subtitle && (
+            <span className="text-xs font-extralight">{subtitle}</span>
+          )}
           <span>
             {date && <span>{date}</span>}
             {time && <span className="px-2">{time}</span>}
@@ -34,23 +38,39 @@ function EventItem(props) {
 }
 
 function createHolidayEventItems(data) {
-  const month = convertNumMonthToName(data.date.slice(5, 7));
+  const month = convertNumMonthToAbbrev(data.date.slice(5, 7));
   const day = data.date.slice(8);
-  const description = `Status: ${data.status}${
-    data.open && `, Open: ${data.open.split("T")[1].slice(0, 8)}`
-  }${data.close && `, Close: ${data.close.split("T")[1].slice(0, 8)}`}`;
+  const exchange = data.exchange;
+  const description =
+    `${data.status}` +
+    `${
+      data.hasOwnProperty("open")
+        ? `, Open: ${data.open.split("T")[1].slice(0, 8)}`
+        : ""
+    }` +
+    `${
+      data.hasOwnProperty("close")
+        ? `, Close: ${data.close.split("T")[1].slice(0, 8)}`
+        : ""
+    }`;
   return (
-    <EventItem name={data.name} month={month} day={day} desc={description} />
+    <EventRowItem
+      title={data.name}
+      subtitle={exchange}
+      month={month}
+      day={day}
+      desc={description}
+    />
   );
 }
 
 export default function MarketHolidays(props) {
-  const { apiUrl } = props;
   const [holidays, setHolidays] = useState([]);
+
   useEffect(() => {
     async function getUpcomingHolidays() {
       try {
-        const response = await axios.get(apiUrl + "/marketstatus/upcoming");
+        const response = await axios.get(API_URL + "/marketstatus/upcoming");
         setHolidays(response.data);
       } catch (error) {
         console.log(error);
@@ -60,7 +80,7 @@ export default function MarketHolidays(props) {
   }, []);
 
   return (
-    <div className="bg-white p-2 mt-4 mb-4 flex flex-col overflow-y-scroll rounded-lg h-1/2">
+    <div className="bg-white p-2 mt-4 mb-4 flex flex-col overflow-y-scroll rounded-lg h-1/2 gap-2">
       <div className="p-2">
         <h2 className="text-xl font-semibold">Market Holidays</h2>
         <hr />
