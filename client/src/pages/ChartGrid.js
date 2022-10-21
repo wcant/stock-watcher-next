@@ -27,3 +27,5 @@ export default function ChartGrid() {
     </div>
   );
 }
+
+// AAPL CAT MSFT GOOGL CMG MRNA MCD GE SBUX AMZN AMD BAC INTC

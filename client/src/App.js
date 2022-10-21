@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import TickerInput from "components/TickerInput";
-
+import { useNavigate } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
@@ -12,6 +11,8 @@ import {
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
 function App() {
+  const navigate = useNavigate();
+  function handleSubmit() {}
   return (
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center pb-4">
@@ -21,7 +22,7 @@ function App() {
           </Link>
           <Link to="/chart-grid">Chart Grid</Link>
         </nav>
-        <TickerInput />
+        <TickerInput handleSubmit={handleSubmit} />
       </div>
       <Outlet />
     </div>

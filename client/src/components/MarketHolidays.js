@@ -55,6 +55,7 @@ function createHolidayEventItems(data) {
     }`;
   return (
     <EventRowItem
+      key={data.date + exchange}
       title={data.name}
       subtitle={exchange}
       month={month}
