@@ -1,9 +1,7 @@
 import { useState } from "react";
-import GainersLosersTable from "components/GainersLosersTable";
+import { Outlet, Link } from "react-router-dom";
 import TickerInput from "components/TickerInput";
-import CardContainer from "components/CardContainer";
-import MarketsSummaryTabs from "components/MarketsSummaryTabs";
-import MarketHolidays from "components/MarketHolidays";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
@@ -14,31 +12,18 @@ import {
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
 function App() {
-  const API_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://stock-watcher-wcant.herokuapp.com/api"
-      : "http://localhost:4000/api";
-
-  const [tickers, setTickers] = useState([]);
-
   return (
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center pb-4">
-        <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
-        <TickerInput setTickers={setTickers} apiUrl={API_URL} />
+        <nav className="text-slate-50">
+          <Link to="/">
+            <h1 className="text-2xl font-bold text-slate-50">Stock Watcher</h1>
+          </Link>
+          <Link to="/chart-grid">Chart Grid</Link>
+        </nav>
+        <TickerInput />
       </div>
-      <MarketsSummaryTabs apiUrl={API_URL} />
-      <div className="flex flex-row gap-4">
-        <GainersLosersTable apiUrl={API_URL} />
-        <div className="max-h-min">
-          <MarketHolidays apiUrl={API_URL} />
-        </div>
-      </div>
-      <CardContainer
-        tickers={tickers}
-        setTickers={setTickers}
-        apiUrl={API_URL}
-      />
+      <Outlet />
     </div>
   );
 }

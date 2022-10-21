@@ -1,7 +1,29 @@
+import { useState } from "react";
+import CardContainer from "components/CardContainer";
+
 export default function ChartGrid() {
+  const [tickers, setTickers] = useState([]);
+
+  // handles populating TickerCards
+  // function handleKeyUp(e) {
+  //     if (e.key === "Enter") {
+  //       setTickers((prevTickers) => {
+  //         // this prevents duplicates
+  //         // could add something to popup a message that it's duplicate
+  //         return prevTickers.includes(search)
+  //           ? [...prevTickers]
+  //           : [...prevTickers, search];
+  //       });
+  //       setSearch("");
+  //     }
+  //     if (e.key === "Escape") {
+  //       console.log("you hit escape");
+  //       setShowDropdown(false);
+  //     }
+  //   }
   return (
     <div>
-      <h1>ChartGrid</h1>
+      <CardContainer tickers={tickers} setTickers={setTickers} />
     </div>
   );
 }

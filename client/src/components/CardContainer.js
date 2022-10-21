@@ -1,7 +1,7 @@
 import StockCard from "components/StockCard";
 
 export default function CardContainer(props) {
-  const { tickers, setTickers, apiUrl } = props;
+  const { tickers, setTickers } = props;
 
   function makeStockCards(ticker, index) {
     return <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />;

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "utils/constants";
+import { useNavigate } from "react-router-dom";
 
 function ResultsItem(props) {
   const { ticker, name, locale, exchange } = props;
@@ -14,9 +15,8 @@ function ResultsItem(props) {
   );
 }
 
-export default function TickerInput(props) {
-  const { setTickers, API_URL } = props;
-
+export default function TickerInput() {
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -49,18 +49,7 @@ export default function TickerInput(props) {
     }
   }
 
-  // handles populating TickerCards
   function handleKeyUp(e) {
-    if (e.key === "Enter") {
-      setTickers((prevTickers) => {
-        // this prevents duplicates
-        // could add something to popup a message that it's duplicate
-        return prevTickers.includes(search)
-          ? [...prevTickers]
-          : [...prevTickers, search];
-      });
-      setSearch("");
-    }
     if (e.key === "Escape") {
       console.log("you hit escape");
       setShowDropdown(false);
