@@ -12,7 +12,11 @@ library.add(faCircleXmark, faArrowUp, faArrowDown);
 
 function App() {
   const navigate = useNavigate();
-  function handleSubmit() {}
+
+  const handleSubmit = (path) => {
+    navigate(path);
+  };
+
   return (
     <div className="flex flex-col justify-center p-4">
       <div className="grid grid-cols-3 items-center pb-4">

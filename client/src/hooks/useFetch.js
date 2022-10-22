@@ -19,5 +19,15 @@ export default function useFetch(url) {
     fetchData();
   }, [url]);
 
-  return { data, isLoaded, error };
+  async function refetch() {
+    try {
+      const response = await axios.get(url);
+      setData(response.data);
+      setIsLoaded(true);
+    } catch (error) {
+      setError(error);
+    }
+  }
+
+  return { data, isLoaded, error, refetch };
 }

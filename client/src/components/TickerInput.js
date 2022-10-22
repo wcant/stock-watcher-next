@@ -3,6 +3,12 @@ import { API_URL } from "utils/constants";
 import TickerDropdown from "./TickerDropdown";
 
 export default function TickerInput(props) {
+  // This component is meant to be relatively generic so that you
+  // can pass in any "submit" handler to determine what happens
+  // when the user presses Enter or clicks an item in the dropdown
+  // Clicking an item in the dropdown will populate search state with
+  // the ticker that was clicked so that you only have to worry about
+  // the value of search when you handle submitting the input value
   const { handleSubmit } = props;
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,8 +27,14 @@ export default function TickerInput(props) {
     } else setShowDropdown(false);
   }
 
-  // Handles the showing/hiding of the dropdown on keyup
   function handleKeyUp(e) {
+    // Handles submit of input
+    if (e.key === "Enter") {
+      handleSubmit(search);
+      setShowDropdown(false);
+    }
+
+    // Handles the showing/hiding of the dropdown on keyup
     if (e.key === "Escape") {
       setShowDropdown(false);
     }
@@ -68,7 +80,15 @@ export default function TickerInput(props) {
         value={search}
         autoComplete="off"
       />
-      {showDropdown && <TickerDropdown url={url} />}
+      {showDropdown && (
+        <TickerDropdown
+          url={url}
+          search={search}
+          setSearch={setSearch}
+          setShowDropdown={setShowDropdown}
+          handleSubmit={handleSubmit}
+        />
+      )}
     </div>
   );
 }
