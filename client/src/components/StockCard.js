@@ -11,6 +11,7 @@ export default function StockCard(props) {
   const [quoteData, setQuoteData] = useState({});
   const [updateTime, setUpdateTime] = useState("");
 
+
   async function getQuote() {
     try {
       const response = await axios.get(API_URL + `/quote/${ticker}`);

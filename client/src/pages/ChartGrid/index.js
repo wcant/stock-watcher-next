@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CardContainer from "components/CardContainer";
+import StockCard from "components/StockCard";
 
 export default function ChartGrid() {
   const [tickers, setTickers] = useState([]);
@@ -21,9 +21,14 @@ export default function ChartGrid() {
   //       setShowDropdown(false);
   //     }
   //   }
+
+  function createStockCards(ticker) {
+    return <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />;
+  }
+
   return (
-    <div>
-      <CardContainer tickers={tickers} setTickers={setTickers} />
+    <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-4">
+      {tickers.map(createStockCards)}
     </div>
   );
 }

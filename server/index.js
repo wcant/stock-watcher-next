@@ -49,6 +49,7 @@ app.all("*", function (req, res, next) {
   next();
 });
 
+// static file data
 app.get("/api/day-open-close/:symbol", async (req, res) => {
   // responding with saved data for demo purposes
   const { symbol } = req.params;
@@ -61,6 +62,7 @@ app.get("/api/day-open-close/:symbol", async (req, res) => {
   if (!res.headersSent) res.json({ message: "Symbol data not available." });
 });
 
+// static file data
 app.get("/api/prev-close/:symbol", async (req, res) => {
   // responding with saved data for demo purposes
   const { symbol } = req.params;
@@ -73,6 +75,7 @@ app.get("/api/prev-close/:symbol", async (req, res) => {
   if (!res.headersSent) res.json({ message: "Symbol data not available." });
 });
 
+// static file data
 app.get("/api/intraday/:symbol", async (req, res) => {
   // responding with saved data for demo purposes
   const { symbol } = req.params;
@@ -82,6 +85,27 @@ app.get("/api/intraday/:symbol", async (req, res) => {
   if (!res.headersSent) res.json({ message: "Symbol data not available." });
 });
 
+// Chart Data
+// arbitrary timeframe
+// from/to is YYYY-MM-DD
+// timespan is minute, hour, day, week, month, quarter, year
+app.get(
+  "/api/aggs/ticker/:symbol/range/:multiplier/:timespan/:from/:to/:limit",
+  async (req, res) => {
+    const { symbol, multiplier, timespan, from, to, limit } = req.params;
+    try {
+      const response = await axios.get(
+        POLY_API_V2 +
+          `/aggs/ticker/${symbol}/range/${multiplier}/${timespan}/${from}/${to}?adjusted=true&sort=asc&limit=${limit}&apiKey=${POLYGON_API_KEY}`
+      );
+      res.json(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+// Gainers/Losers
 app.get("/api/stocks/:direction", async (req, res) => {
   const { direction } = req.params;
   try {
@@ -110,12 +134,11 @@ app.get("/api/stocks/snapshot/:symbol", async (req, res) => {
   }
 });
 
-app.get("/api/reference/tickers/:symbol/:limit", async (req, res) => {
-  const { symbol, limit } = req.params;
+app.get("/api/reference/news/:symbol", async (req, res) => {
+  const { symbol } = req.params;
   try {
     const queryURL =
-      POLY_API_V3 +
-      `/reference/tickers?ticker.gte=${symbol}&active=true&sort=ticker&order=asc&limit=${limit}&apiKey=${POLYGON_API_KEY}`;
+      POLY_API_V2 + `/reference/news?${symbol}&apiKey=${POLYGON_API_KEY}`;
     const response = await axios.get(queryURL);
     res.json(response.data);
   } catch (error) {
@@ -123,6 +146,48 @@ app.get("/api/reference/tickers/:symbol/:limit", async (req, res) => {
   }
 });
 
+app.get("/api/reference/tickers/:symbol", async (req, res) => {
+  const { symbol } = req.params;
+  try {
+    const queryURL =
+      POLY_API_V3 + `/reference/tickers/${symbol}?apiKey=${POLYGON_API_KEY}`;
+    const response = await axios.get(queryURL);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/reference/tickers/:symbol/:limit", async (req, res) => {
+  const { symbol, limit } = req.params;
+
+  try {
+    const queryURL =
+      POLY_API_V3 +
+      `/reference/tickers?ticker=${symbol}&active=true&sort=ticker&order=asc&limit=${limit}&apiKey=${POLYGON_API_KEY}`;
+    const response = await axios.get(queryURL);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/reference/tickers/:symbol/:limit/:range", async (req, res) => {
+  const { symbol, limit, range } = req.params;
+
+  try {
+    const queryURL =
+      POLY_API_V3 +
+      `/reference/tickers?ticker${
+        "." + range
+      }=${symbol}&active=true&sort=ticker&order=asc&limit=${limit}&apiKey=${POLYGON_API_KEY}`;
+    console.log(queryURL);
+    const response = await axios.get(queryURL);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
 app.get(
   "/api/crypto/open-close/:baseCurrency/:quoteCurrency/:date",
   async (req, res) => {
