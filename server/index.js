@@ -1,11 +1,16 @@
-const fs = require("fs");
-const path = require("path");
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
+import fs from "fs";
+import path from "path";
+import * as dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
+  dotenv.config();
 }
+import express from "express";
+import cors from "cors";
+import axios from "axios";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 4000;
 const POLYGON_API_KEY = process.env.POLYGON_API_KEY;
@@ -16,9 +21,9 @@ const POLY_API_V1 = "https://api.polygon.io/v1";
 const POLY_API_V2 = "https://api.polygon.io/v2";
 const POLY_API_V3 = "https://api.polygon.io/v3";
 
-const dataDir = __dirname + "/data";
-const openClose = require(dataDir + "/day-open-close.json");
-const prevClose = require(dataDir + "/prev-close.json");
+// const dataDir = __dirname + "/data";
+// const openClose = require(dataDir + "/day-open-close.json");
+// const prevClose = require(dataDir + "/prev-close.json");
 
 // async function getData() {
 //   try {
@@ -146,18 +151,6 @@ app.get("/api/reference/news/:symbol", async (req, res) => {
   }
 });
 
-app.get("/api/reference/tickers/:symbol", async (req, res) => {
-  const { symbol } = req.params;
-  try {
-    const queryURL =
-      POLY_API_V3 + `/reference/tickers/${symbol}?apiKey=${POLYGON_API_KEY}`;
-    const response = await axios.get(queryURL);
-    res.json(response.data);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
 app.get("/api/reference/tickers/:symbol/:limit", async (req, res) => {
   const { symbol, limit } = req.params;
 
@@ -165,6 +158,18 @@ app.get("/api/reference/tickers/:symbol/:limit", async (req, res) => {
     const queryURL =
       POLY_API_V3 +
       `/reference/tickers?ticker=${symbol}&active=true&sort=ticker&order=asc&limit=${limit}&apiKey=${POLYGON_API_KEY}`;
+    const response = await axios.get(queryURL);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/reference/tickers/:symbol", async (req, res) => {
+  const { symbol } = req.params;
+  try {
+    const queryURL =
+      POLY_API_V3 + `/reference/tickers/${symbol}?apiKey=${POLYGON_API_KEY}`;
     const response = await axios.get(queryURL);
     res.json(response.data);
   } catch (error) {

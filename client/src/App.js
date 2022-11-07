@@ -1,14 +1,16 @@
 import { Link, useNavigate, Routes, Route } from "react-router-dom";
-import TickerInput from "components/TickerInput";
 import Home from "pages/Home";
 import ChartGrid from "pages/ChartGrid";
 import TickerOverview from "pages/TickerOverview";
+import TickerInput from "components/TickerInput";
+import MarketsSummaryTabs from "components/MarketsSummaryTabs";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
   faArrowUp,
   faArrowDown,
 } from "@fortawesome/free-solid-svg-icons";
+import MarketsSummary from "components/MarketsSummaryTabs";
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
@@ -35,7 +37,7 @@ function App() {
           <TickerInput handleSubmit={handleSubmit} />
         </div>
       </div>
-
+      <MarketsSummaryTabs />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chart-grid" element={<ChartGrid />} />

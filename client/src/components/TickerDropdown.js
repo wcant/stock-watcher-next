@@ -1,4 +1,5 @@
 import useFetch from "hooks/useFetch";
+import useDebounce from "hooks/useDebounce";
 
 function ResultsItem(props) {
   const { ticker, name, locale, exchange, handleItemSelect } = props;
@@ -25,7 +26,7 @@ export default function TickerDropdown(props) {
     setShowDropdown(false);
   };
 
-  if (error) console.log(error);
+  if (error) console.error(error);
 
   if (isLoaded) {
     // data format: [ [ticker, name, locale, exchange], [...], ... ]
@@ -55,5 +56,5 @@ export default function TickerDropdown(props) {
         })}
       </div>
     );
-  } else return "Loading...";
+  } else return <p>"Loading..."</p>;
 }

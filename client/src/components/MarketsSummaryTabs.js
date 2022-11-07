@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import MiniTickerCard from "components/MiniTickerCard";
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "components/Tabs";
+import MiniTickerCard from "components/MiniTickerCard";
+
 import axios from "axios";
 import { DELAY_1_MINUTE, API_URL } from "utils/constants";
 
@@ -20,7 +21,7 @@ function createMiniTickerCards(tickers) {
   return tabPanels;
 }
 
-export default function MarketsSummary(props) {
+export default function MarketsSummaryTabs(props) {
   // US data is the only one that's live at the moment due to API limitations
   const [usData, setUsData] = useState({
     label: "US",
@@ -117,7 +118,7 @@ export default function MarketsSummary(props) {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg">
+    <div className="bg-white rounded-lg flex max-content">
       <Tabs label="US">
         <TabsHeader>
           {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {

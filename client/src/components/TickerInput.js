@@ -6,15 +6,19 @@ export default function TickerInput(props) {
   // This component is meant to be relatively generic so that you
   // can pass in any "submit" handler to determine what happens
   // when the user presses Enter or clicks an item in the dropdown
+  // Reason: I might want the submit to navigate to a new route, or
+  //    add something to the page, such as on Chart Grid.
+
   // Clicking an item in the dropdown will populate search state with
   // the ticker that was clicked so that you only have to worry about
   // the value of search when you handle submitting the input value
+
   const { handleSubmit } = props;
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [search, setSearch] = useState("");
 
-  const url = API_URL + `/reference/tickers/${search}/5`;
+  const url = API_URL + `/reference/tickers/${search}/5/gte`;
 
   const dropdown = useRef(null);
 
