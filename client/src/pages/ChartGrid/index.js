@@ -1,5 +1,6 @@
 import { useState } from "react";
 import StockCard from "components/StockCard";
+import TickerInput from "components/TickerInput";
 
 export default function ChartGrid() {
   const [tickers, setTickers] = useState([]);
@@ -27,9 +28,18 @@ export default function ChartGrid() {
   }
 
   return (
-    <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-4">
-      {tickers.map(createStockCards)}
-    </div>
+    <>
+      <div className="flex justify-center items-center">
+        <TickerInput />
+      </div>
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-4">
+        {tickers.map((ticker) => {
+          return (
+            <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />
+          );
+        })}
+      </div>
+    </>
   );
 }
 

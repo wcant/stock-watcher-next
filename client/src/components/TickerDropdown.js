@@ -30,7 +30,7 @@ export default function TickerDropdown(props) {
 
   if (isLoaded) {
     // data format: [ [ticker, name, locale, exchange], [...], ... ]
-    const results = data?.results.map((result) => [
+    const results = data.results.map((result) => [
       result.ticker,
       result.name,
       result.locale.toUpperCase(),

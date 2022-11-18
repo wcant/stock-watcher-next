@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import useFetch from "hooks/useFetch";
 import { API_URL } from "utils/constants";
 import StockChart from "components/StockChart";
-import TickerNewsList from "pages/TickerOverview/components//TickerNewsList";
-import TickerDetails from "pages/TickerOverview/components/TickerDetails";
-import TickerPricing from "pages/TickerOverview/components//TickerPricing";
+import TickerNewsList from "pages/Quote/components/TickerNewsList";
+import TickerDetails from "pages/Quote/components/TickerDetails";
+import TickerPricing from "pages/Quote/components/TickerPricing";
 // endpoints used
 
 // quote / recent trade info
@@ -14,7 +14,7 @@ import TickerPricing from "pages/TickerOverview/components//TickerPricing";
 // news
 // /api/reference/news/:symbol
 
-export default function TickerOverview() {
+export default function Quote() {
   const { ticker } = useParams();
 
   const url = API_URL + `/reference/tickers/${ticker}/1`;

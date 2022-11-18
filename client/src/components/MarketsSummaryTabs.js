@@ -118,7 +118,7 @@ export default function MarketsSummaryTabs(props) {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg flex max-content">
+    <div className="bg-white rounded-lg flex max-content lg:w-1/2 md:w-1/2 overflow-scroll">
       <Tabs label="US">
         <TabsHeader>
           {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {

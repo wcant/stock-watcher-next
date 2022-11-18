@@ -28,7 +28,7 @@ export function TabsHeader(props) {
 export function TabsBody(props) {
   const { openTab, children } = props;
   return (
-    <div className="w-full p-2 overflow-hidden">
+    <div className="w-full p-2">
       {React.Children.map(children, (child) => {
         return React.cloneElement(child, { openTab });
       })}
