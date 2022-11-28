@@ -18,7 +18,6 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 4000;
 const POLYGON_API_KEY = process.env.POLYGON_API_KEY;
-
 const rest = restClient(POLYGON_API_KEY);
 const app = express();
 

@@ -17,44 +17,42 @@ function ResultsItem(props) {
 }
 
 export default function TickerDropdown(props) {
-  const { url, setSearch, search, handleSubmit, setShowDropdown } = props;
+  const { url, setSearch, handleSubmit, setShowDropdown } = props;
+  console.log(url);
   const { data, isLoaded, error } = useFetch(url);
-
+  console.log("running tickerdropdown");
   const handleItemSelect = (itemSelected) => {
     setSearch(itemSelected);
-    handleSubmit(search);
+    handleSubmit();
     setShowDropdown(false);
   };
 
   if (error) console.error(error);
 
-  if (isLoaded) {
-    // data format: [ [ticker, name, locale, exchange], [...], ... ]
-    const results = data.results.map((result) => [
-      result.ticker,
-      result.name,
-      result.locale.toUpperCase(),
-      result["primary_exchange"],
-    ]);
-
+  if (isLoaded && data?.results) {
     return (
       <div
         role="listbox"
         className="absolute bg-white divide-y divide-slate-200 shadow-lg border-1"
       >
-        {results.map((result) => {
+        {data.results.map((result) => {
           return (
             <ResultsItem
-              key={result[0]}
-              ticker={result[0]}
-              name={result[1]}
-              locale={result[2]}
-              exchange={result[3]}
+              key={result.ticker}
+              ticker={result.ticker}
+              name={result.name}
+              locale={result.locale.toUpperCase()}
+              exchange={result["primary_exchange"]}
               handleItemSelect={handleItemSelect}
             />
           );
         })}
       </div>
     );
-  } else return <p>"Loading..."</p>;
+  } else
+    return (
+      <div className="flex flex-col p-2 z-50 hover:bg-gray-300 max-w-xs">
+        <p>Loading...</p>
+      </div>
+    );
 }

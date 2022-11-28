@@ -23,14 +23,20 @@ export default function ChartGrid() {
   //     }
   //   }
 
-  function createStockCards(ticker) {
-    return <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />;
-  }
+  const handleSubmit = () => {
+    setTickers((prevTickers) => {
+      // this prevents duplicates
+      // could add something to popup a message that it's duplicate
+      return prevTickers.includes(tickers)
+        ? [...prevTickers]
+        : [...prevTickers, tickers];
+    });
+  };
 
   return (
     <>
       <div className="flex justify-center items-center">
-        <TickerInput />
+        <TickerInput handleSubmit={handleSubmit} />
       </div>
       <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-4">
         {tickers.map((ticker) => {

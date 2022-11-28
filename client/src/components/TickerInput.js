@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { API_URL } from "utils/constants";
 import TickerDropdown from "./TickerDropdown";
-import { useLocation } from "react-router-dom";
 
 export default function TickerInput(props) {
   // This component is meant to be relatively generic so that you
@@ -14,7 +13,7 @@ export default function TickerInput(props) {
   // the ticker that was clicked so that you only have to worry about
   // the value of search when you handle submitting the input value
 
-  const location = useLocation();
+  const { handleSubmit } = props;
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [search, setSearch] = useState("");
