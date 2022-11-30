@@ -1,9 +1,9 @@
 import { useState } from "react";
-import StockCard from "components/StockCard";
+import GridCard from "pages/ChartGrid/components/GridCard";
 import TickerInput from "components/TickerInput";
 
 export default function ChartGrid() {
-  const [tickers, setTickers] = useState([]);
+  const [gridTickers, setGridTickers] = useState([]);
 
   // handles populating TickerCards
   // function handleKeyUp(e) {
@@ -24,12 +24,12 @@ export default function ChartGrid() {
   //   }
 
   const handleSubmit = () => {
-    setTickers((prevTickers) => {
+    setGridTickers((prevTickers) => {
       // this prevents duplicates
       // could add something to popup a message that it's duplicate
-      return prevTickers.includes(tickers)
+      return prevTickers.includes(gridTickers)
         ? [...prevTickers]
-        : [...prevTickers, tickers];
+        : [...prevTickers, gridTickers];
     });
   };
 
@@ -39,9 +39,13 @@ export default function ChartGrid() {
         <TickerInput handleSubmit={handleSubmit} />
       </div>
       <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-3 p-4">
-        {tickers.map((ticker) => {
+        {gridTickers.map((ticker) => {
           return (
-            <StockCard key={ticker} ticker={ticker} setTickers={setTickers} />
+            <GridCard
+              key={ticker}
+              ticker={ticker}
+              setGridTickers={setGridTickers}
+            />
           );
         })}
       </div>

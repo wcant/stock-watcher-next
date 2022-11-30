@@ -6,6 +6,7 @@ import StockChart from "components/StockChart";
 import TickerNewsList from "pages/Quote/components/TickerNewsList";
 import TickerDetails from "pages/Quote/components/TickerDetails";
 import TickerPricing from "pages/Quote/components/TickerPricing";
+import LoadingModal from "components/LoadingModal";
 // endpoints used
 
 // quote / recent trade info
@@ -31,17 +32,23 @@ export default function Quote() {
 
   return (
     <main className="flex justify-center">
-      <div className="max-w-5xl">
-        <h2>{data.hasOwnProperty("name") && data.name}</h2>
-      </div>
-      <div>
-        <StockChart />
-      </div>
-      <div>
-        <TickerNewsList />
-        <TickerPricing />
-        <TickerDetails />
-      </div>
+      {isLoading ? (
+        <LoadingModal />
+      ) : (
+        <>
+          <div className="max-w-5xl">
+            <h2>{data.hasOwnProperty("name") && data.name}</h2>
+          </div>
+          <div>
+            <StockChart />
+          </div>
+          <div>
+            <TickerNewsList />
+            <TickerPricing />
+            <TickerDetails />
+          </div>
+        </>
+      )}
     </main>
   );
 }

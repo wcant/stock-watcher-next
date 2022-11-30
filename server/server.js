@@ -24,8 +24,17 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.use(cors());
 
+app.get("/api/test", async (req, res) => {
+  try {
+    const result = await rest.reference.tickerNews("MSFT");
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 // Get Snapshot of single ticker pricing info
-app.get("/api/:market/snapshot/:ticker", async (req, res) => {
+app.get("/api/:market/snapshot/:ticker", (req, res) => {
   const { market, ticker } = req.params;
 
   try {
@@ -46,7 +55,9 @@ app.get("/api/:market/snapshot/:ticker", async (req, res) => {
   }
 });
 
-app.get("/api/reference/tickers/:ticker/:limit/:range?", async (req, res) => {
+// Requests first 5 tickers that match the ticker string
+// Used for the TickerInput/Dropdown component
+app.get("/api/reference/tickers/:ticker/:limit/:range?", (req, res) => {
   // ref: https://github.com/polygon-io/client-js/blob/master/src/rest/reference/tickers.ts
   const { ticker, limit, range } = req.params;
   const queryType = range ? `ticker.${range}` : "ticker";
@@ -57,6 +68,26 @@ app.get("/api/reference/tickers/:ticker/:limit/:range?", async (req, res) => {
         limit: limit,
       })
       .then((data) => res.json(data));
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.get("/api/reference/tickernews/:ticker", async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const result = await rest.reference.tickerNews(ticker);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.get("/api/reference/tickerdetails/:ticker", async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const result = await rest.reference.tickerDetails(ticker);
+    res.json(result);
   } catch (error) {
     console.error(error);
   }

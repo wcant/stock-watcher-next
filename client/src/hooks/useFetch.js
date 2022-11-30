@@ -25,7 +25,7 @@ export default function useFetch(url, options = {}, dependencies = []) {
 
   useEffect(() => {
     fetchData();
-  }, [url]);
+  }, [url, fetchData]);
 
   async function refetch() {
     try {

@@ -51,7 +51,10 @@ export default function TickerDropdown(props) {
     );
   } else
     return (
-      <div className="flex flex-col p-2 z-50 hover:bg-gray-300 max-w-xs">
+      <div
+        role="listbox"
+        className="absolute bg-white divide-y divide-slate-200 shadow-lg border-1"
+      >
         <p>Loading...</p>
       </div>
     );

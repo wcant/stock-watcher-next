@@ -47,20 +47,20 @@ export default function TickerInput(props) {
   // Handles the showing/hiding of the dropdown on clicks
   useEffect(() => {
     const handleUserClick = (e) => {
+      // if clicked outside dropdown, then hide it
       if (
         dropdown.current &&
         showDropdown &&
         !dropdown.current.contains(e.target)
       ) {
-        // if clicked outside dropdown, then hide it
         setShowDropdown(false);
+        // if dropdown is clicked after being hidden, then show it if input isn't empty
       } else if (
         search.length > 0 &&
         dropdown.current &&
         !showDropdown &&
         dropdown.current.contains(e.target)
       ) {
-        // if dropdown is clicked after being hidden, then show it if input isn't empty
         setShowDropdown(true);
       }
     };
