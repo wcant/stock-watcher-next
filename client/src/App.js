@@ -5,6 +5,8 @@ import Chart from "pages/Chart";
 import Quote from "pages/Quote";
 import TickerInput from "components/TickerInput";
 import MarketsSummaryTabs from "components/MarketsSummaryTabs";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
@@ -14,23 +16,13 @@ import {
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
+const queryClient = new QueryClient();
+
 function App() {
-  const [gridTickers, setGridTickers] = useState([]);
-  const [quoteTicker, setQuoteTicker] = useState("");
-
-  const updateGridTickers = (ticker) => {
-    setGridTickers((prevGrid) => {
-      return [...prevGrid, ticker];
-    });
-  };
-
-  const updateQuoteTickers = (ticker) => {
-    setQuoteTicker(ticker);
-  };
-
   const activeClasses = "underline";
+
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <div className="flex flex-col justify-center p-4">
         <div className="grid grid-cols-3 items-center pb-4">
           <div className="flex items-center p-4">
@@ -81,35 +73,16 @@ function App() {
           </Routes>
           <TickerInput /> */}
         </div>
+        <Routes>
+          <Route exact path="/" element={<ChartGrid />} />
+          <Route path="/chart/:ticker" element={<Chart />} />
+          <Route path="/quote/:ticker" element={<Quote />} />
+        </Routes>
         <div className="flex justify-center w-full">
           <MarketsSummaryTabs />
         </div>
       </div>
-      <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <ChartGrid
-              gridTickers={gridTickers}
-              setGridTickers={setGridTickers}
-            />
-          }
-        />
-        <Route
-          path="/chart/:ticker"
-          element={
-            <Chart quoteTicker={quoteTicker} setQuoteTicker={setQuoteTicker} />
-          }
-        />
-        <Route
-          path="/quote/:ticker"
-          element={
-            <Quote quoteTicker={quoteTicker} setQuoteTicker={setQuoteTicker} />
-          }
-        />
-      </Routes>
-    </>
+    </QueryClientProvider>
   );
 }
 

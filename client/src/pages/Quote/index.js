@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetch from "hooks/useFetch";
 import { API_URL } from "utils/constants";
 import StockChart from "components/StockChart";
 import TickerNewsList from "pages/Quote/components/TickerNewsList";
 import TickerDetails from "pages/Quote/components/TickerDetails";
-import TickerPricing from "pages/Quote/components/TickerPricing";
+import TickerPriceHistory from "pages/Quote/components/TickerPriceHistory";
 import LoadingModal from "components/LoadingModal";
+import axios from "axios";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+} from "@tanstack/react-query";
 // endpoints used
 
 // quote / recent trade info
@@ -18,9 +24,13 @@ import LoadingModal from "components/LoadingModal";
 export default function Quote() {
   const { ticker } = useParams();
 
+  const queryClient = useQueryClient();
+
   const url = API_URL + `/reference/tickers/${ticker}/1`;
 
-  const { data, isLoading, error } = useFetch(url);
+  const { isLoading, error, data, isFetching } = useQuery({
+    queryKey: ["quote"],
+  });
   // address = { address1, city, state, postal_code };
   // branding = { logo_url, icon_url };
 
@@ -44,7 +54,7 @@ export default function Quote() {
           </div>
           <div>
             <TickerNewsList />
-            <TickerPricing />
+            <TickerPriceHistory />
             <TickerDetails />
           </div>
         </>

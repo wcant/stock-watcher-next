@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "utils/constants";
-export default function TickerPricing(props) {
+
+export default function TickerPriceHistory(props) {
   const { ticker } = props;
 
   const [data, setData] = useState({});
