@@ -73,10 +73,13 @@ app.get("/api/reference/tickers/:ticker/:limit/:range?", (req, res) => {
   }
 });
 
-app.get("/api/reference/tickernews/:ticker", async (req, res) => {
-  const { ticker } = req.params;
+app.get("/api/reference/tickernews/:ticker/:limit", async (req, res) => {
+  const { ticker, limit } = req.params;
   try {
-    const result = await rest.reference.tickerNews(ticker);
+    const result = await rest.reference.tickerNews({
+      ticker: ticker,
+      limit: limit,
+    });
     res.json(result);
   } catch (error) {
     console.error(error);

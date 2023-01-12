@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "utils/constants";
+import TickerInput from "components/TickerInput";
 import StockChart from "components/StockChart";
 import TickerNewsList from "pages/Quote/components/TickerNewsList";
 import TickerDetails from "pages/Quote/components/TickerDetails";
@@ -13,52 +14,61 @@ import {
   useQueryClient,
   QueryClient,
 } from "@tanstack/react-query";
-// endpoints used
-
-// quote / recent trade info
-// /api/stocks/snapshot/:symbol
-
-// news
-// /api/reference/news/:symbol
 
 export default function Quote() {
   const { ticker } = useParams();
 
   const queryClient = useQueryClient();
 
-  const url = API_URL + `/reference/tickers/${ticker}/1`;
+  // const chartURL = API_URL + `/reference/tickers/${ticker}/1`;
+  // const chartQuery = useQuery({
+  //   queryKey: ["quote"],
+  //   queryFn: () => axios.get(chartURL).then((res) => res.data),
+  // });
 
-  const { isLoading, error, data, isFetching } = useQuery({
-    queryKey: ["quote"],
+  const newsURL = API_URL + `/reference/tickernews/${ticker}/8`;
+  const newsQuery = useQuery({
+    queryKey: ["news"],
+    queryFn: () => axios.get(newsURL).then((res) => res.data),
   });
-  // address = { address1, city, state, postal_code };
-  // branding = { logo_url, icon_url };
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-  }, [data]);
+  const priceURL = API_URL + `/stocks/snapshot/${ticker}`;
+  const priceQuery = useQuery({
+    queryKey: ["price"],
+    queryFn: () => axios.get(priceURL).then((res) => res.data),
+  });
+
+  const detailsURL = API_URL + `/reference/tickerdetails/${ticker}`;
+  const detailsQuery = useQuery({
+    queryKey: ["details"],
+    queryFn: () => axios.get(detailsURL).then((res) => res.data),
+  });
 
   return (
-    <main className="flex justify-center">
-      {isLoading ? (
-        <LoadingModal />
-      ) : (
-        <>
-          <div className="max-w-5xl">
-            <h2>{data.hasOwnProperty("name") && data.name}</h2>
-          </div>
-          <div>
-            <StockChart />
-          </div>
-          <div>
-            <TickerNewsList />
-            <TickerPriceHistory />
-            <TickerDetails />
-          </div>
-        </>
-      )}
+    <main className="mt-6">
+      <div className="w-40">
+        <TickerInput />
+      </div>
+      <div>
+        <div>
+          <h2>{detailsQuery.data?.results["name"]}</h2>
+        </div>
+        <div className="max-w-5xl">
+          <h2>{ticker}</h2>
+        </div>
+        <div>{/* <StockChart data={chartQuery?.data?.results} /> */}</div>
+        <div>
+          {priceQuery.isFetched && (
+            <TickerPriceHistory data={priceQuery?.data?.ticker} />
+          )}
+          {detailsQuery.isFetched && (
+            <TickerDetails data={detailsQuery?.data?.results} />
+          )}
+          {newsQuery.isFetched && (
+            <TickerNewsList data={newsQuery?.data?.results} />
+          )}
+        </div>
+      </div>
     </main>
   );
 }

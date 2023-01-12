@@ -73,15 +73,16 @@ function App() {
           </Routes>
           <TickerInput /> */}
         </div>
+        <div className="flex justify-center w-full">
+          <MarketsSummaryTabs />
+        </div>
         <Routes>
           <Route exact path="/" element={<ChartGrid />} />
           <Route path="/chart/:ticker" element={<Chart />} />
           <Route path="/quote/:ticker" element={<Quote />} />
         </Routes>
-        <div className="flex justify-center w-full">
-          <MarketsSummaryTabs />
-        </div>
       </div>
+      <ReactQueryDevtools initialIsOpen />
     </QueryClientProvider>
   );
 }
