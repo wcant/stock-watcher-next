@@ -18,15 +18,7 @@ import {
 export default function Quote() {
   const { ticker } = useParams();
 
-  const queryClient = useQueryClient();
-
-  // const chartURL = API_URL + `/reference/tickers/${ticker}/1`;
-  // const chartQuery = useQuery({
-  //   queryKey: ["quote"],
-  //   queryFn: () => axios.get(chartURL).then((res) => res.data),
-  // });
-
-  const newsURL = API_URL + `/reference/tickernews/${ticker}/8`;
+  const newsURL = API_URL + `/reference/tickernews/${ticker}/10`;
   const newsQuery = useQuery({
     queryKey: ["news"],
     queryFn: () => axios.get(newsURL).then((res) => res.data),
@@ -56,7 +48,9 @@ export default function Quote() {
         <div className="max-w-5xl">
           <h2>{ticker}</h2>
         </div>
-        <div>{/* <StockChart data={chartQuery?.data?.results} /> */}</div>
+        <div>
+          <StockChart ticker={ticker} />
+        </div>
         <div>
           {priceQuery.isFetched && (
             <TickerPriceHistory data={priceQuery?.data?.ticker} />
@@ -64,9 +58,10 @@ export default function Quote() {
           {detailsQuery.isFetched && (
             <TickerDetails data={detailsQuery?.data?.results} />
           )}
-          {newsQuery.isFetched && (
-            <TickerNewsList data={newsQuery?.data?.results} />
-          )}
+          <div className="bg-white">
+            {newsQuery.isFetching ? <h1>Fetching News</h1> : ""}
+          </div>
+          {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
         </div>
       </div>
     </main>

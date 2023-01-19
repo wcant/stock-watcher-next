@@ -1,43 +1,41 @@
+function NewsItemCard(props) {
+  const { imageUrl, publisher, title, time, articleUrl } = props;
+
+  return (
+    <div>
+      {imageUrl && <img className="max-w-xs" src={imageUrl} alt="" />}
+      <span>{publisher.name}</span>
+      <span>
+        <a href={articleUrl} data-expand-click-area>
+          {title}
+        </a>
+      </span>
+      <span>{time}</span>
+    </div>
+  );
+}
+
 export default function TickerNewsList(props) {
-  const { results, count } = props;
+  const { results, count } = props.data;
 
   const newsItems = [];
 
   for (let i = 0; i < count; i++) {
     const { publisher, title, published_utc, article_url, image_url } =
-      results.i;
-    const item = (
-      <div>
-        <span>results.i.</span>
-        <span>results.i</span>
-      </div>
-    );
+      results[i];
 
-    newsItems.push(item);
+    // first 3 are cards with images
+    newsItems.push(
+      <NewsItemCard
+        key={i}
+        publisher={publisher}
+        title={title}
+        articleUrl={article_url}
+        imageUrl={i < 3 && image_url}
+        time={published_utc}
+      />
+    );
   }
 
-  return (
-    <div className="flex flex-col">
-      {/* <span className="flex justify-between">
-        <span className="stock--details-name">Open:</span>
-        <span>{data.hasOwnProperty("open") ? `$${data.open}` : "-"}</span>
-      </span>
-      <span className="flex justify-between">
-        <span className="stock--details-name">Close:</span> <br />
-        <span>{data.hasOwnProperty("close") ? `$${data.close}` : "-"}</span>
-      </span>
-      <span className="flex justify-between">
-        <span className="stock--details-name">High:</span> <br />
-        <span>{data.hasOwnProperty("high") ? `$${data.high}` : "-"}</span>
-      </span>
-      <span className="flex justify-between">
-        <span className="stock--details-name">Low:</span> <br />
-        <span>{data.hasOwnProperty("low") ? `$${data.low}` : "-"}</span>
-      </span>
-      <span className="flex justify-between">
-        <span className="stock--details-name">Volume:</span> <br />
-        <span>{data.hasOwnProperty("volume") ? data.volume : "-"}</span>
-      </span> */}
-    </div>
-  );
+  return <section className="flex flex-col p-4 bg-white">{newsItems}</section>;
 }

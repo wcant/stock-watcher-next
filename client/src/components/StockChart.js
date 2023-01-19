@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import Plot from "react-plotly.js";
 import axios from "axios";
 import { collectDataToArrays } from "../utils.js";
-import useFetch from "hooks/useFetch";
 import { API_URL } from "utils/constants";
 import { DELAY_1_MINUTE } from "utils/constants";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 function parseAggregatePolygon(data) {
   // Polygon API Aggregate data
@@ -46,14 +46,16 @@ function parseAggregatePolygon(data) {
 }
 
 export default function StockChart(props) {
+
   const { ticker } = props;
 
-  const url =
-    API_URL + `/aggs/ticker/${ticker}/range/1/minute/2022-10-23/2022-10-24/300`;
+  const range = useState({multiplier: 1, timespan: 'minute', from:, to: , limit: })
 
-  const { data, isLoading, error, refetch } = useFetch(url);
-
-  if (error) console.log(error);
+  const chartURL = API_URL + `/aggregates/${ticker}/range/`;
+  const chartQuery = useQuery({
+    queryKey: ["quote"],
+    queryFn: () => axios.get(chartURL).then((res) => res.data),
+  });
 
   // const [lastRefresh, setLastRefresh] = useState(null);
   const [trace, setTrace] = useState({

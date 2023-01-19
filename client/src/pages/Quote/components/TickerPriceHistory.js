@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { API_URL } from "utils/constants";
-
 export default function TickerPriceHistory(props) {
   const { day, prevDay } = props.data;
 
-  const currency = {
+  const USDollar = {
     style: "currency",
     currency: "USD",
   };
 
-  const prevClose = new Intl.NumberFormat("en-US", currency).format(prevDay?.c);
-  const open = new Intl.NumberFormat("en-US", currency).format(day?.o);
-  const dayLow = new Intl.NumberFormat("en-US", currency).format(day?.l);
-  const dayHigh = new Intl.NumberFormat("en-US", currency).format(day?.h);
+  const prevClose = new Intl.NumberFormat("en-US", USDollar).format(prevDay?.c);
+  const open = new Intl.NumberFormat("en-US", USDollar).format(day?.o);
+  const dayLow = new Intl.NumberFormat("en-US", USDollar).format(day?.l);
+  const dayHigh = new Intl.NumberFormat("en-US", USDollar).format(day?.h);
   const dayVolume = new Intl.NumberFormat().format(day?.v);
 
   return (
