@@ -5,8 +5,7 @@ import Chart from "pages/Chart";
 import Quote from "pages/Quote";
 import TickerInput from "components/TickerInput";
 import MarketsSummaryTabs from "components/MarketsSummaryTabs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleXmark,
@@ -16,13 +15,11 @@ import {
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
-const queryClient = new QueryClient();
-
 function App() {
   const activeClasses = "underline";
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <div className="flex flex-col justify-center p-4">
         <div className="grid grid-cols-3 items-center pb-4">
           <div className="flex items-center p-4">
@@ -82,8 +79,7 @@ function App() {
           <Route path="/quote/:ticker" element={<Quote />} />
         </Routes>
       </div>
-      <ReactQueryDevtools initialIsOpen />
-    </QueryClientProvider>
+    </>
   );
 }
 

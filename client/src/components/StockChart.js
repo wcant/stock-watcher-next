@@ -1,55 +1,63 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Plot from "react-plotly.js";
 import axios from "axios";
+import { DateTime } from "luxon";
 import { collectDataToArrays } from "../utils.js";
 import { API_URL } from "utils/constants";
 import { DELAY_1_MINUTE } from "utils/constants";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
-function parseAggregatePolygon(data) {
-  // Polygon API Aggregate data
-  // data = {
-  //   "ticker": "NAME",
-  //   "queryCount": num,
-  //   "resultsCount": num,
-  //   "adjusted": true,
-  //   "results": [{v, vw, a, o, c, h, l, t, n}, {}, ...]
-  //
-  // }
+function reducer(state, action) {
+  switch (action.type) {
+    case "change_multiplier": {
+      return {
+        ...state,
+        multiplier: action.newMultiplier,
+      };
+    }
+    case "change_timespan": {
+      return {
+        ...state,
+        timespan: action.newTimespan,
+      };
+    }
+    case "change_start_date": {
+      return {
+        ...state,
+        from: action.newStartDate,
+      };
+    }
+    case "change_end_date": {
+      return {
+        ...state,
+        from: action.newEndDate,
+      };
+    }
+    case "change_limit": {
+      return {
+        ...state,
+        limit: action.newLimit,
+      };
+    }
+    default:
+      break;
+  }
 
-  // results.v - volume over time period
-  // results.vw - volume weighted average price
-  // results.t - unix msec timestamp for the start of the agg window
-  // results.o - open price
-  // results.n - number of transactions
-  // results.l - low price
-  // results.h - high
-  // results.c - close
-
-  const trace = {
-    x: [],
-    close: [],
-    high: [],
-    low: [],
-    open: [],
-  };
-
-  data.forEach((period) => {
-    trace.x.push(period.t);
-    trace.close.push(period.c);
-    trace.high.push(period.h);
-    trace.low.push(period.l);
-    trace.open.push(period.o);
-  });
-
-  return trace;
+  throw Error("unknown action");
 }
 
 export default function StockChart(props) {
-
   const { ticker } = props;
 
-  const range = useState({multiplier: 1, timespan: 'minute', from:, to: , limit: })
+  const today = DateTime.now().toFormat("yyyy-LL-dd");
+
+  const [state, dispatch] = useReducer(reducer, {
+    multiplier: 1,
+    timespan: "minute",
+    from: today,
+    to: today,
+    limit: 120,
+  });
 
   const chartURL = API_URL + `/aggregates/${ticker}/range/`;
   const chartQuery = useQuery({
@@ -76,17 +84,17 @@ export default function StockChart(props) {
     },
   });
 
-  useEffect(() => {
-    if (data.hasOwnProperty("results")) {
-      setTrace((prevTrace) => {
-        const parsedData = parseAggregatePolygon(data.results);
-        return {
-          ...prevTrace,
-          ...parsedData,
-        };
-      });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data.hasOwnProperty("results")) {
+  //     setTrace((prevTrace) => {
+  //       const parsedData = parseAggregatePolygon(data.results);
+  //       return {
+  //         ...prevTrace,
+  //         ...parsedData,
+  //       };
+  //     });
+  //   }
+  // }, [data]);
 
   // useEffect(() => {
   //   if (intradayData) {
@@ -127,13 +135,13 @@ export default function StockChart(props) {
   //   return () => clearInterval(interval);
   // }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetch();
-    }, DELAY_1_MINUTE);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refetch();
+  //   }, DELAY_1_MINUTE);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <Plot
@@ -144,4 +152,43 @@ export default function StockChart(props) {
       style={{ width: "100%", height: "100%" }}
     />
   );
+}
+
+function parseAggregatePolygon(data) {
+  // Polygon API Aggregate data
+  // data = {
+  //   "ticker": "NAME",
+  //   "queryCount": num,
+  //   "resultsCount": num,
+  //   "adjusted": true,
+  //   "results": [{v, vw, a, o, c, h, l, t, n}, {}, ...]
+  //
+  // }
+
+  // results.v - volume over time period
+  // results.vw - volume weighted average price
+  // results.t - unix msec timestamp for the start of the agg window
+  // results.o - open price
+  // results.n - number of transactions
+  // results.l - low price
+  // results.h - high
+  // results.c - close
+
+  const trace = {
+    x: [],
+    close: [],
+    high: [],
+    low: [],
+    open: [],
+  };
+
+  data.forEach((period) => {
+    trace.x.push(period.t);
+    trace.close.push(period.c);
+    trace.high.push(period.h);
+    trace.low.push(period.l);
+    trace.open.push(period.o);
+  });
+
+  return trace;
 }
