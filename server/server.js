@@ -26,15 +26,14 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 app.use(cors());
 
 app.get(
-  "/api/aggregates/:ticker/range/:multiplier/:timespan/:from/:to/:limit",
+  "/api/aggregates/:ticker/range/:multiplier/:timespan/:from/:to",
   (req, res, next) => {
-    const { ticker, multiplier, timespan, from, to, limit } = req.params;
+    const { ticker, multiplier, timespan, from, to } = req.params;
 
     rest.stocks
       .aggregates(ticker, multiplier, timespan, from, to, {
         adjusted: true,
         sort: "asc",
-        limit: limit,
       })
       .then((data) => res.json(data))
       .catch((err) => next(err));

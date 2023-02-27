@@ -29,7 +29,7 @@ export default function TickerDetails(props) {
   }).format(dateObj);
 
   return (
-    <section className="bg-white p-4">
+    <section className="bg-white p-6 rounded-lg">
       <h2>About</h2>
       {/* logo has to be fetched from api, haven't decided how to do this since URL isn't known until after the initial API call, and the API key needs to be added */}
       {/* {logo_url && (

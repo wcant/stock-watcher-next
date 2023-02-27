@@ -22,46 +22,46 @@ export default function Quote() {
   const newsQuery = useQuery({
     queryKey: ["news"],
     queryFn: () => axios.get(newsURL).then((res) => res.data),
+    staleTime: 1000 * 60 * 10,
   });
 
   const priceURL = API_URL + `/stocks/snapshot/${ticker}`;
   const priceQuery = useQuery({
     queryKey: ["price"],
     queryFn: () => axios.get(priceURL).then((res) => res.data),
+    staleTime: 1000 * 60,
   });
 
   const detailsURL = API_URL + `/reference/tickerdetails/${ticker}`;
   const detailsQuery = useQuery({
     queryKey: ["details"],
     queryFn: () => axios.get(detailsURL).then((res) => res.data),
+    staleTime: 1000 * 60 * 600,
   });
 
   return (
-    <main className="mt-6">
-      <div className="w-40">
+    <main className="w-7/8 w-max-5xl mx-auto">
+      <div className="p-4">
         <TickerInput />
       </div>
-      <div>
-        <div>
-          <h2>{detailsQuery.data?.results["name"]}</h2>
-        </div>
-        <div className="max-w-5xl">
-          <h2>{ticker}</h2>
-        </div>
-        <div>
+
+      <div className="grid grid-cols-6 gap-4 rounded-lg divide-y divide-solid">
+        <div className="col-span-4">
+          <div className="bg-white px-6 py-4">
+            <h2>{detailsQuery.data?.results.name}</h2>
+          </div>
           <StockChart ticker={ticker} />
+          <div className="grid grid-cols-1">
+            {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
+          </div>
         </div>
-        <div>
+        <div className="col-span-2">
           {priceQuery.isFetched && (
             <TickerPriceHistory data={priceQuery?.data?.ticker} />
           )}
           {detailsQuery.isFetched && (
             <TickerDetails data={detailsQuery?.data?.results} />
           )}
-          <div className="bg-white">
-            {newsQuery.isFetching ? <h1>Fetching News</h1> : ""}
-          </div>
-          {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
         </div>
       </div>
     </main>

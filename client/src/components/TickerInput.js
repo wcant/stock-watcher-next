@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { API_URL } from "utils/constants";
 import TickerDropdown from "./TickerDropdown";
+import { toast } from "react-hot-toast";
 
 export default function TickerInput(props) {
   // This component is meant to be relatively generic so that you

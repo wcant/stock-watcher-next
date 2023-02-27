@@ -1,72 +1,46 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useRef } from "react";
 import Plot from "react-plotly.js";
 import axios from "axios";
 import { DateTime } from "luxon";
-import { collectDataToArrays } from "../utils.js";
 import { API_URL } from "utils/constants";
-import { DELAY_1_MINUTE } from "utils/constants";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import parseAggregateQuery from "utils/parseAggregateQuery";
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "change_multiplier": {
-      return {
-        ...state,
-        multiplier: action.newMultiplier,
-      };
-    }
-    case "change_timespan": {
-      return {
-        ...state,
-        timespan: action.newTimespan,
-      };
-    }
-    case "change_start_date": {
-      return {
-        ...state,
-        from: action.newStartDate,
-      };
-    }
-    case "change_end_date": {
-      return {
-        ...state,
-        from: action.newEndDate,
-      };
-    }
-    case "change_limit": {
-      return {
-        ...state,
-        limit: action.newLimit,
-      };
-    }
-    default:
-      break;
-  }
+// the chartQuery response object will successfully return (res 200) on a day
+// that the market wasn't open, such as holiday or weekend, so to actually get
+// a data.results object successfully you must provide a valid trading day.
 
-  throw Error("unknown action");
-}
+// This also means trading ranges that include an invalid trading day will return less
+// days than expected.  This is an issue for having the ability to select a range
+// in the PlotPeriodSelector component.
+
+// TODO
+// if a request gets no results, need to handle showing the last traded day data
+// also, dealing with the problem that 1day and 5 day periods don't necessarily show that number of days
+// if a weekend or holiday is within the period
+// request previous day data for ticker
+// determine date from timestamp
+// convert date to YYYY-MM-DD
+//
 
 export default function StockChart(props) {
   const { ticker } = props;
 
   const today = DateTime.now().toFormat("yyyy-LL-dd");
+  // const [trace, setTrace] = useState({
+  //   increasing: { line: { color: "green" } },
+  //   decreasing: { line: { color: "red" } },
+  //   type: "candlestick",
+  //   xaxis: "x",
+  //   yaxis: "y",
+  // });
 
-  const [state, dispatch] = useReducer(reducer, {
-    multiplier: 1,
-    timespan: "minute",
-    from: today,
-    to: today,
-    limit: 120,
-  });
-
-  const chartURL = API_URL + `/aggregates/${ticker}/range/`;
-  const chartQuery = useQuery({
-    queryKey: ["quote"],
-    queryFn: () => axios.get(chartURL).then((res) => res.data),
-  });
-
-  // const [lastRefresh, setLastRefresh] = useState(null);
-  const [trace, setTrace] = useState({
+  const [plotData, setPlotData] = useState({
+    x: [],
+    close: [],
+    high: [],
+    low: [],
+    open: [],
     increasing: { line: { color: "green" } },
     decreasing: { line: { color: "red" } },
     type: "candlestick",
@@ -74,121 +48,255 @@ export default function StockChart(props) {
     yaxis: "y",
   });
 
-  const [layout, setLayout] = useState({
-    dragmode: "zoom",
-    showlegend: false,
-    xaxis: {
-      rangeslider: {
-        visible: false,
+  const [chartOptions, dispatch] = useReducer(setChartOptions, {
+    layout: {
+      dragmode: "zoom",
+      showlegend: false,
+      xaxis: {
+        rangeslider: {
+          visible: true,
+        },
       },
+      autosize: true,
+      datarevision: 0,
+    },
+    config: {},
+  });
+
+  function setChartOptions(state, action) {
+    switch (action.type) {
+      case "trigger_plot_rerender": {
+        return {
+          ...state,
+          layout: {
+            ...state.layout,
+            datarevision: state.datarevision + 1,
+          },
+        };
+      }
+      default:
+        break;
+    }
+    throw Error("unknown action");
+  }
+
+  const initialQueryOptions = {
+    multiplier: 1,
+    timespan: "minute",
+    from: today,
+    to: today,
+  };
+
+  const { multiplier, timespan, from, to } = initialQueryOptions;
+  const initialQueryURL =
+    API_URL +
+    `/aggregates/${ticker}/range/${multiplier}/${timespan}/${from}/${to}`;
+
+  const chartQuery = useQuery({
+    queryKey: ["quote", "chart", ticker],
+    staleTime: 1000 * 60,
+    queryFn: async () => {
+      const response = await axios.get(initialQueryURL);
+      console.log(response);
+      setPlotData((prevPlotData) => {
+        return {
+          ...prevPlotData,
+          ...response.results,
+        };
+      });
+      return response;
     },
   });
 
-  // useEffect(() => {
-  //   if (data.hasOwnProperty("results")) {
-  //     setTrace((prevTrace) => {
-  //       const parsedData = parseAggregatePolygon(data.results);
-  //       return {
-  //         ...prevTrace,
-  //         ...parsedData,
-  //       };
-  //     });
-  //   }
-  // }, [data]);
+  const updateChart = useMutation({
+    mutationFn: async (mutatedUrl) => {
+      const response = await axios.get(mutatedUrl);
+      return response;
+    },
+    // onSuccess: (data) => {
+    //   QueryClient.setQueryData(["quote", "chart", ticker], data)
+    // },
+  });
 
-  // useEffect(() => {
-  //   if (intradayData) {
-  //     setTrace((prevTrace) => {
-  //       const result = collectDataToArrays(
-  //         "09:30:00",
-  //         "16:00:00",
-  //         5,
-  //         intradayData
-  //       );
-  //       return {
-  //         ...prevTrace,
-  //         ...result,
-  //       };
-  //     });
-  //   } else {
-  //     console.log(`WARNING: intradayData contains ${intradayData}`);
-  //   }
-  // }, [intradayData]);
+  useEffect(() => {
+    if (chartQuery.isSuccess) {
+      const newTrace = parseAggregateQuery(chartQuery.data.data.results);
+      setPlotData((prevPlotData) => ({ ...prevPlotData, ...newTrace }));
+      // dispatch({ type: "trigger_plot_rerender" });
+    }
+  }, [
+    chartQuery?.data?.data?.results,
+    chartQuery?.isSuccess,
+    chartOptions.layout.datarevision,
+  ]);
 
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios.get(dataUrl + `/intraday/${symbol}`);
-  //     setIntradayData(response.data);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  useEffect(() => {
+    // on successful mutation, dispatch({type: "trigger_plot_rerender"})
+    if (updateChart.isSuccess) {
+      console.log(updateChart.data.data.results);
+      const newTrace = parseAggregateQuery(updateChart.data.data.results);
+      setPlotData((prevPlotData) => ({ ...prevPlotData, ...newTrace }));
+      // dispatch({ type: "trigger_plot_rerender", trace: newTrace });
+    }
+  }, [
+    updateChart.isSuccess,
+    updateChart?.data?.data?.results,
+    chartOptions.layout.datarevision,
+  ]);
 
-  // useEffect(() => {
-  //   getData();
-  //   console.log(intradayData);
-  //   const interval = setInterval(() => {
-  //     getData();
-  //   }, 300000);
+  function handlePeriodUpdate({ type, ticker }) {
+    const now = DateTime.now();
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    switch (type) {
+      case "set_period_1day": {
+        const from = now.toFormat("yyyy-LL-dd");
+        const to = now.toFormat("yyyy-LL-dd");
+        const mutatedUrl =
+          API_URL +
+          `/aggregates/${ticker}/range/${1}/${"minute"}/${from}/${to}`;
+        updateChart.mutate(mutatedUrl);
+        break;
+      }
+      case "set_period_5day": {
+        const from = now.minus({ days: 5 }).toFormat("yyyy-LL-dd");
+        const to = now.toFormat("yyyy-LL-dd");
+        const mutatedUrl =
+          API_URL +
+          `/aggregates/${ticker}/range/${5}/${"minute"}/${from}/${to}`;
+        updateChart.mutate(mutatedUrl);
+        break;
+      }
+      // case "set_period_1month": {
+      //   return {
+      //     ...state,
+      //     queryOptions: {
+      //       ...state.queryOptions,
+      //       multiplier: 1,
+      //       timespan: "day",
+      //       from: now.minus({ month: 1 }).toFormat("yyyy-LL-dd"),
+      //       to: now.toFormat("yyyy-LL-dd"),
+      //     },
+      //   };
+      // }
+      // case "set_period_6month": {
+      //   return {
+      //     ...state,
+      //     queryOptions: {
+      //       ...state.queryOptions,
+      //       multiplier: 1,
+      //       timespan: "day",
+      //       from: now.minus({ month: 6 }).toFormat("yyyy-LL-dd"),
+      //       to: now.toFormat("yyyy-LL-dd"),
+      //     },
+      //   };
+      // }
+      // case "set_period_ytd": {
+      //   return {
+      //     ...state,
+      //     queryOptions: {
+      //       ...state.queryOptions,
+      //       multiplier: 1,
+      //       timespan: "day",
+      //       from: now.toFormat("kkkk"),
+      //       to: now.toFormat("yyyy-LL-dd"),
+      //     },
+      //   };
+      // }
+      // case "set_period_1year": {
+      //   return {
+      //     ...state,
+      //     queryOptions: {
+      //       ...state.queryOptions,
+      //       multiplier: 1,
+      //       timespan: "day",
+      //       from: now.minus({ year: 1 }).toFormat("yyyy-LL-dd"),
+      //       to: now.toFormat("yyyy-LL-dd"),
+      //     },
+      //   };
+      // }
+      // case "set_period_5year": {
+      //   return {
+      //     ...state,
+      //     queryOptions: {
+      //       ...state.queryOptions,
+      //       multiplier: 1,
+      //       timespan: "week",
+      //       from: now.minus({ year: 5 }).toFormat("yyyy-LL-dd"),
+      //       to: now.toFormat("yyyy-LL-dd"),
+      //     },
+      //   };
+      // }
+      default:
+        break;
+    }
+  }
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     refetch();
-  //   }, DELAY_1_MINUTE);
+  if (chartQuery.isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
-  //   return () => clearInterval(interval);
-  // }, []);
+  if (chartQuery.isError) {
+    return <h1>Error loading chart...</h1>;
+  }
 
   return (
-    <Plot
-      data={[trace]}
-      layout={layout}
-      useResizeHandler={true}
-      // className="w-full h-full"
-      style={{ width: "100%", height: "100%" }}
-    />
+    <div className="p-2 bg-white">
+      <PlotPeriodSelector
+        handlePeriodUpdate={handlePeriodUpdate}
+        ticker={ticker}
+      />
+      <Plot
+        data={[{ ...plotData }]}
+        {...chartOptions}
+        useResizeHandler={true}
+        style={{ width: "100%", marginTop: "none" }}
+      />
+    </div>
   );
 }
 
-function parseAggregatePolygon(data) {
-  // Polygon API Aggregate data
-  // data = {
-  //   "ticker": "NAME",
-  //   "queryCount": num,
-  //   "resultsCount": num,
-  //   "adjusted": true,
-  //   "results": [{v, vw, a, o, c, h, l, t, n}, {}, ...]
-  //
-  // }
-
-  // results.v - volume over time period
-  // results.vw - volume weighted average price
-  // results.t - unix msec timestamp for the start of the agg window
-  // results.o - open price
-  // results.n - number of transactions
-  // results.l - low price
-  // results.h - high
-  // results.c - close
-
-  const trace = {
-    x: [],
-    close: [],
-    high: [],
-    low: [],
-    open: [],
-  };
-
-  data.forEach((period) => {
-    trace.x.push(period.t);
-    trace.close.push(period.c);
-    trace.high.push(period.h);
-    trace.low.push(period.l);
-    trace.open.push(period.o);
-  });
-
-  return trace;
-}
+const PlotPeriodSelector = ({ handlePeriodUpdate, ticker }) => {
+  return (
+    <div className="flex bg-white">
+      <button
+        onClick={() => handlePeriodUpdate({ type: "set_period_1day", ticker })}
+      >
+        <span className="px-4">1D</span>
+      </button>
+      <button
+        onClick={() => handlePeriodUpdate({ type: "set_period_5day", ticker })}
+      >
+        <span className="px-4">5D</span>
+      </button>
+      <button
+        onClick={() =>
+          handlePeriodUpdate({ type: "set_period_1month", ticker })
+        }
+      >
+        <span className="px-4">1M</span>
+      </button>
+      <button
+        onClick={() =>
+          handlePeriodUpdate({ type: "set_period_6month", ticker })
+        }
+      >
+        <span className="px-4">6M</span>
+      </button>
+      <button
+        onClick={() => handlePeriodUpdate({ type: "set_period_ytd", ticker })}
+      >
+        <span className="px-4">YTD</span>
+      </button>
+      <button
+        onClick={() => handlePeriodUpdate({ type: "set_period_1year", ticker })}
+      >
+        <span className="px-4">1Y</span>
+      </button>
+      <button
+        onClick={() => handlePeriodUpdate({ type: "set_period_5year", ticker })}
+      >
+        <span className="px-4">5Y</span>
+      </button>
+    </div>
+  );
+};

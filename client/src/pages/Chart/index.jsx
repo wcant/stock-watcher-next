@@ -6,7 +6,11 @@ import StockChart from "components/StockChart";
 function Chart() {
   const { ticker } = useParams();
 
-  return <div>index</div>;
+  return (
+    <div className="h-screen">
+      <StockChart ticker={ticker} />
+    </div>
+  );
 }
 
 export default Chart;
