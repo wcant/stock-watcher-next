@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export default function parseAggregateQuery(data) {
   // Polygon API Aggregate data
   // data = {
@@ -30,7 +32,10 @@ export default function parseAggregateQuery(data) {
 
   try {
     data.forEach((period) => {
-      trace.x.push(period.t);
+      const time = DateTime.fromMillis(period.t).toLocaleString(
+        DateTime.TIME_SIMPLE
+      );
+      trace.x.push(time);
       trace.close.push(period.c);
       trace.high.push(period.h);
       trace.low.push(period.l);

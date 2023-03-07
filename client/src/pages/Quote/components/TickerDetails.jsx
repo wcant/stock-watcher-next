@@ -1,3 +1,5 @@
+import Heading from "components/Heading";
+
 export default function TickerDetails(props) {
   const {
     data: {
@@ -30,7 +32,7 @@ export default function TickerDetails(props) {
 
   return (
     <section className="bg-white p-6 rounded-lg">
-      <h2>About</h2>
+      <Heading hLevel="h2" content="About" />
       {/* logo has to be fetched from api, haven't decided how to do this since URL isn't known until after the initial API call, and the API key needs to be added */}
       {/* {logo_url && (
         <a href={homepage_url}>
@@ -38,25 +40,25 @@ export default function TickerDetails(props) {
         </a>
       )} */}
       <p>{description}</p>
-      <div>
+      <div className="flex flex-col py-4 divide-y divide-solid">
         <span className="flex justify-between">
-          <span>Headquarters</span>
+          <span className="text-xl">Headquarters</span>
           <span>{`${city}, ${state}`}</span>
         </span>
         <span className="flex justify-between">
-          <span>Market Cap</span>
+          <span className="text-xl">Market Cap</span>
           <span>{marketCap}</span>
         </span>
         <span className="flex justify-between">
-          <span>Total Employees</span>
+          <span className="text-xl">Employees</span>
           <span>{totalEmployees}</span>
         </span>
         <span className="flex justify-between">
-          <span>List Date</span>
+          <span className="text-xl">List Date</span>
           <span>{listDate}</span>
         </span>
         <span className="flex justify-between">
-          <span>Shares Outstanding</span>
+          <span className="text-xl">Shares Outstanding</span>
           <span>{sharesOutstanding}</span>
         </span>
       </div>

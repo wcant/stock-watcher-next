@@ -118,7 +118,7 @@ export default function MarketsSummaryTabs(props) {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg flex max-content lg:w-1/2 md:w-1/2 overflow-scroll">
+    <div className=" rounded-lg bg-transparent overflow-scroll">
       <Tabs label="US">
         <TabsHeader>
           {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
@@ -142,46 +142,3 @@ export default function MarketsSummaryTabs(props) {
     </div>
   );
 }
-
-// Might use for parsing crypto requests
-//   if (market.type === "crypto") {
-//     Object.entries(market.tickers).forEach((ticker) => {
-//       const tickSplit = ticker.split("-");
-//       const baseCurrency = tickSplit[0];
-//       const quoteCurrency = tickSplit[1];
-//       const yesterday = moment().subtract(1, "days").format("YYYY-MM-DD");
-//       const queryUrl =
-//         API_URL +
-//         `/crypto/open-close/${baseCurrency}/${quoteCurrency}/${yesterday}`;
-//       const resData = getData(queryUrl);
-//       market.tickers[ticker].price = resData["close"];
-//       market.tickers[ticker].price = resData["close"] - resData["open"];
-//       market.tickers[ticker].price =
-//         ((resData["close"] - resData["open"]) / resData["open"]) * 100;
-//     });
-//   }
-
-// More general getData function I may use part of
-// async function getData(queryUrl) {
-//   try {
-//     const response = await axios.get(queryUrl);
-//     const { todaysChange, todaysChangePerc, min, ticker } =
-//       response.data.ticker;
-
-//     setData((prevData) => {
-//       return {
-//         ...prevData,
-//         tickers: {
-//           ...prevData.tickers,
-//           [ticker]: {
-//             price: min.c.toFixed(2),
-//             change: todaysChange.toFixed(2),
-//             percentChange: todaysChangePerc.toFixed(2),
-//           },
-//         },
-//       };
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }

@@ -24,7 +24,7 @@ import parseAggregateQuery from "utils/parseAggregateQuery";
 //
 
 export default function StockChart(props) {
-  const { ticker } = props;
+  const { ticker, fullHeight } = props;
 
   const today = DateTime.now().toFormat("yyyy-LL-dd");
   // const [trace, setTrace] = useState({
@@ -34,6 +34,12 @@ export default function StockChart(props) {
   //   xaxis: "x",
   //   yaxis: "y",
   // });
+
+  const time = DateTime.fromMillis(1676970000000).toLocaleString(
+    DateTime.TIME_SIMPLE
+  );
+
+  console.log(time);
 
   const [plotData, setPlotData] = useState({
     x: [],
@@ -53,10 +59,15 @@ export default function StockChart(props) {
       dragmode: "zoom",
       showlegend: false,
       xaxis: {
+        nticks: 10,
         rangeslider: {
           visible: true,
         },
+        tickmode: "auto",
+        showticklabels: true,
+        tickangle: 0,
       },
+
       autosize: true,
       datarevision: 0,
     },
@@ -239,6 +250,8 @@ export default function StockChart(props) {
     return <h1>Error loading chart...</h1>;
   }
 
+  let styles = { width: "100%", marginTop: "none" };
+
   return (
     <div className="p-2 bg-white">
       <PlotPeriodSelector
@@ -249,7 +262,7 @@ export default function StockChart(props) {
         data={[{ ...plotData }]}
         {...chartOptions}
         useResizeHandler={true}
-        style={{ width: "100%", marginTop: "none" }}
+        style={styles}
       />
     </div>
   );

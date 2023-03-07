@@ -3,9 +3,10 @@ import { useParams } from "react-router-dom";
 import { API_URL } from "utils/constants";
 import TickerInput from "components/TickerInput";
 import StockChart from "components/StockChart";
-import TickerNewsList from "pages/Quote/components/TickerNewsList";
+import TickerNewsList from "components/TickerNewsList";
 import TickerDetails from "pages/Quote/components/TickerDetails";
 import TickerPriceHistory from "pages/Quote/components/TickerPriceHistory";
+import Heading from "components/Heading";
 import LoadingModal from "components/LoadingModal";
 import axios from "axios";
 import {
@@ -40,30 +41,33 @@ export default function Quote() {
   });
 
   return (
-    <main className="w-7/8 w-max-5xl mx-auto">
-      <div className="p-4">
+    <div className="w-7/8 w-max-4xl lg:w-4/5 mx-auto">
+      <div className="p-4 ">
         <TickerInput />
       </div>
-
-      <div className="grid grid-cols-6 gap-4 rounded-lg divide-y divide-solid">
-        <div className="col-span-4">
-          <div className="bg-white px-6 py-4">
-            <h2>{detailsQuery.data?.results.name}</h2>
+      <div className="rounded-lg mb-4">
+        <div className="bg-white px-6 py-4">
+          <Heading hLevel="h1" content={detailsQuery.data?.results.name} />
+        </div>
+        <StockChart ticker={ticker} />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 rounded-lg">
+        <div className="flex flex-col gap-4">
+          <div className="">
+            {priceQuery.isFetched && (
+              <TickerPriceHistory data={priceQuery?.data?.ticker} />
+            )}
           </div>
-          <StockChart ticker={ticker} />
-          <div className="grid grid-cols-1">
-            {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
+          <div className="">
+            {detailsQuery.isFetched && (
+              <TickerDetails data={detailsQuery?.data?.results} />
+            )}
           </div>
         </div>
-        <div className="col-span-2">
-          {priceQuery.isFetched && (
-            <TickerPriceHistory data={priceQuery?.data?.ticker} />
-          )}
-          {detailsQuery.isFetched && (
-            <TickerDetails data={detailsQuery?.data?.results} />
-          )}
+        <div className="">
+          {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

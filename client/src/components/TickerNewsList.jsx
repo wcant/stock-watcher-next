@@ -1,7 +1,8 @@
 import NewsCard from "./NewsCard";
+import Heading from "./Heading";
 
 export default function TickerNewsList(props) {
-  const { results, count } = props.data;
+  const { results } = props.data;
 
   const newsItems = [];
 
@@ -23,8 +24,10 @@ export default function TickerNewsList(props) {
 
   return (
     <section className=" bg-white w-full p-6">
-      <h2>Latest News</h2>
-      <div className="grid grid-cols-2 gap-4">{newsItems}</div>
+      <Heading hLevel="h2" content="Latest News" />
+      <div className="flex flex-col justify-center items-center gap-4">
+        {newsItems}
+      </div>
     </section>
   );
 }

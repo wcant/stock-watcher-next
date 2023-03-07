@@ -1,13 +1,13 @@
+import Layout from "Layout";
 import ChartGrid from "pages/ChartGrid";
 import Home from "pages/Home";
-import Chart from "pages/Chart";
 import Quote from "pages/Quote";
+import Chart from "pages/Chart";
 import TickerInput from "components/TickerInput";
 import MarketsSummaryTabs from "components/MarketsSummaryTabs";
-import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { NavLink, Link, useNavigate, Routes, Route } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { Toaster } from "react-hot-toast";
 import {
   faCircleXmark,
   faArrowUp,
@@ -17,34 +17,28 @@ import {
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
 function App() {
-  const activeClasses = "underline";
+  const [cookies, setCookie, removeCookie] = useCookies(null);
+  const authToken = cookies.AuthToken;
+  const userEmail = cookies.Email;
 
   return (
-    <>
-      <div>
-        <Toaster />
-      </div>
-      <div className="flex flex-col justify-center p-4">
-        <div className="grid grid-cols-3 items-center pb-4">
-          <div className="flex items-center p-4">
-            <h1 className="mr-6 text-2xl font-bold text-slate-50">
-              Stock Watcher
-            </h1>
-          </div>
-        </div>
-        <div className="flex justify-center w-full">
+    <Layout>
+      <div className="flex flex-col justify-center">
+        <div className="flex justify-center mx-auto w-full navy-topo-light">
           <MarketsSummaryTabs />
         </div>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/chartgrid" element={<ChartGrid />} />
-          {/* <Route path="/chart/:ticker" element={<Chart />} /> */}
-          <Route exact path="/quote" element={<Home />} />
-          <Route path="/quote/:ticker" element={<Quote />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        <div className="navy-topo-light">
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/chartgrid" element={<ChartGrid />} />
+            {/* <Route path="/chart/:ticker" element={<Chart />} /> */}
+            <Route exact path="/quote" element={<Home />} />
+            <Route path="/quote/:ticker" element={<Quote />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </div>
       </div>
-    </>
+    </Layout>
   );
 }
 

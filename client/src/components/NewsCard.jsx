@@ -2,12 +2,12 @@ export default function NewsCard(props) {
   const { imageUrl, publisher, title, time, articleUrl } = props;
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-      <div className="md:flex">
-        <div className="md:shrink-0">
+    <div className="w-full max-w-md  bg-white rounded-xl shadow-md overflow-hidden sm:max-w-2xl">
+      <div className="sm:flex">
+        <div className="sm:shrink-0">
           {imageUrl && (
             <img
-              className="h-48 w-full object-cover md:h-full md:w-48"
+              className="h-24 w-full object-cover md:h-full sm:w-32"
               src={imageUrl}
               alt=""
             />

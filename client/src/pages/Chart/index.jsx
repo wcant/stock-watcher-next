@@ -7,8 +7,8 @@ function Chart() {
   const { ticker } = useParams();
 
   return (
-    <div className="h-screen">
-      <StockChart ticker={ticker} />
+    <div className="h-full">
+      <StockChart ticker={ticker} fullHeight={true} />
     </div>
   );
 }
