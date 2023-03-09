@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { API_URL } from "utils/constants";
 import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
 import parseAggregateQuery from "utils/parseAggregateQuery";
+import { toast } from "react-hot-toast";
 
 // the chartQuery response object will successfully return (res 200) on a day
 // that the market wasn't open, such as holiday or weekend, so to actually get
@@ -59,7 +60,7 @@ export default function StockChart(props) {
       dragmode: "zoom",
       showlegend: false,
       xaxis: {
-        nticks: 10,
+        nticks: 5,
         rangeslider: {
           visible: true,
         },
@@ -71,7 +72,9 @@ export default function StockChart(props) {
       autosize: true,
       datarevision: 0,
     },
-    config: {},
+    config: {
+      displayModeBar: false,
+    },
   });
 
   function setChartOptions(state, action) {
@@ -156,6 +159,8 @@ export default function StockChart(props) {
   ]);
 
   function handlePeriodUpdate({ type, ticker }) {
+    toast.error("This feature is unavailable. 1D is shown by default.");
+
     const now = DateTime.now();
 
     switch (type) {

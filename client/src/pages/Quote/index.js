@@ -51,14 +51,14 @@ export default function Quote() {
         </div>
         <StockChart ticker={ticker} />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 rounded-lg">
-        <div className="flex flex-col items-center gap-4 md:h-full md:flex-row">
-          <div className="h-full w-full  md:basis-1/3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg">
+        <div className="flex flex-col items-center gap-4 md:h-full md:order-2">
+          <div className="h-full w-full md:basis-0">
             {priceQuery.isFetched && (
               <TickerPriceHistory data={priceQuery?.data?.ticker} />
             )}
           </div>
-          <div className="h-full  md:basis-2/3">
+          <div className="h-full md:order-1">
             {detailsQuery.isFetched && (
               <TickerDetails data={detailsQuery?.data?.results} />
             )}
