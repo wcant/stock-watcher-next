@@ -1,5 +1,6 @@
 import NewsCard from "./NewsCard";
 import Heading from "./Heading";
+import luxon from "luxon";
 
 export default function TickerNewsList(props) {
   const { results } = props.data;

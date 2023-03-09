@@ -17,7 +17,7 @@ export default function TickerPriceHistory(props) {
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-lg p-6 divide-y divide-solid">
+    <div className="flex flex-col h-full bg-white rounded-lg p-6 divide-y divide-solid">
       {Object.keys(data).map((item, i) => (
         <PriceHistoryItem key={i} name={item} value={data[item]} />
       ))}

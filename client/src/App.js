@@ -16,30 +16,28 @@ import {
 
 library.add(faCircleXmark, faArrowUp, faArrowDown);
 
-function App() {
+export default function App() {
   const [cookies, setCookie, removeCookie] = useCookies(null);
   const authToken = cookies.AuthToken;
   const userEmail = cookies.Email;
 
   return (
     <Layout>
-      <div className="flex flex-col justify-center">
-        <div className="flex justify-center mx-auto w-full navy-topo-light">
+      <div className="pb-10 pt-5 h-full navy-topo-light">
+        <div className="max-w-screen-xl mx-auto">
           <MarketsSummaryTabs />
-        </div>
-        <div className="navy-topo-light">
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/chartgrid" element={<ChartGrid />} />
-            {/* <Route path="/chart/:ticker" element={<Chart />} /> */}
-            <Route exact path="/quote" element={<Home />} />
-            <Route path="/quote/:ticker" element={<Quote />} />
-            <Route path="*" element={<Home />} />
-          </Routes>
+          <main>
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/chartgrid" element={<ChartGrid />} />
+              {/* <Route path="/chart/:ticker" element={<Chart />} /> */}
+              <Route exact path="/quote" element={<Home />} />
+              <Route path="/quote/:ticker" element={<Quote />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </main>
         </div>
       </div>
     </Layout>
   );
 }
-
-export default App;

@@ -34,6 +34,7 @@ export default function MarketsSummaryTabs(props) {
     },
   });
 
+  // Using static data here for demo purposes, API has too many restrictions
   const [euroData, setEuroData] = useState({
     label: "Europe",
     type: "stocks",
@@ -67,7 +68,6 @@ export default function MarketsSummaryTabs(props) {
       AUDUSD: { price: 0.6399, change: null, percentChange: null },
     },
   });
-  // using static data for crypto to demo. API is too limiting
   const [cryptoData, setCryptoData] = useState({
     label: "Crypto",
     type: "crypto",
@@ -118,27 +118,25 @@ export default function MarketsSummaryTabs(props) {
   }, []);
 
   return (
-    <div className=" rounded-lg bg-transparent overflow-scroll">
-      <Tabs label="US">
-        <TabsHeader>
-          {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
-            return (
-              <Tab key={market.label} label={market.label}>
-                {market.label}
-              </Tab>
-            );
-          })}
-        </TabsHeader>
-        <TabsBody>
-          {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
-            return (
-              <TabPanel key={market.label} label={market.label}>
-                {createMiniTickerCards(market.tickers)}
-              </TabPanel>
-            );
-          })}
-        </TabsBody>
-      </Tabs>
-    </div>
+    <Tabs label="US">
+      <TabsHeader>
+        {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
+          return (
+            <Tab key={market.label} label={market.label}>
+              {market.label}
+            </Tab>
+          );
+        })}
+      </TabsHeader>
+      <TabsBody>
+        {[usData, euroData, asiaData, forexData, cryptoData].map((market) => {
+          return (
+            <TabPanel key={market.label} label={market.label}>
+              {createMiniTickerCards(market.tickers)}
+            </TabPanel>
+          );
+        })}
+      </TabsBody>
+    </Tabs>
   );
 }

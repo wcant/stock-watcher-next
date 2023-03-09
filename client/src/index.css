@@ -6,10 +6,6 @@
   box-sizing: border-box;
 }
 
-img {
-  width: 100%;
-}
-
 html,
 body {
   height: 100%;
@@ -24,23 +20,9 @@ body {
   background-color: #222831;
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
 }
 
 .close-card-icon {

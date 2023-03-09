@@ -6,7 +6,7 @@ export default function Layout({ children }) {
     <>
       <Toaster position="top-center" reverseOrder={false} />
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </>
   );
