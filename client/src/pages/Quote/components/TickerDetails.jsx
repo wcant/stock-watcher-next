@@ -19,9 +19,16 @@ export default function TickerDetails(props) {
     currency: "USD",
   };
 
-  const marketCap = new Intl.NumberFormat("en-US", USDollar).format(market_cap);
+  const marketCap = new Intl.NumberFormat("en-US", {
+    ...USDollar,
+    notation: "compact",
+  }).format(market_cap);
+
   const totalEmployees = new Intl.NumberFormat().format(total_employees);
-  const sharesOutstanding = new Intl.NumberFormat().format(shares_outstanding);
+
+  const sharesOutstanding = new Intl.NumberFormat("en-US", {
+    notation: "compact",
+  }).format(shares_outstanding);
 
   const dateObj = new Date(list_date + "T00:00:00");
   const listDate = new Intl.DateTimeFormat("en-US", {

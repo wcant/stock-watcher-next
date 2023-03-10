@@ -79,13 +79,22 @@ app.get("/api/reference/tickers/:ticker/:limit/:range?", (req, res, next) => {
 
 app.get("/api/reference/tickernews/:ticker/:limit", async (req, res, next) => {
   const { ticker, limit } = req.params;
-  rest.reference
-    .tickerNews({
-      ticker: ticker,
-      limit: limit,
-    })
-    .then((data) => res.json(data))
-    .catch((err) => next(err));
+  if (ticker !== "null") {
+    rest.reference
+      .tickerNews({
+        ticker: ticker,
+        limit: limit,
+      })
+      .then((data) => res.json(data))
+      .catch((err) => next(err));
+  } else {
+    rest.reference
+      .tickerNews({
+        limit: limit,
+      })
+      .then((data) => res.json(data))
+      .catch((err) => next(err));
+  }
 });
 
 app.get("/api/reference/tickerdetails/:ticker", async (req, res, next) => {

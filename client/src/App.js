@@ -2,7 +2,6 @@ import Layout from "Layout";
 import ChartGrid from "pages/ChartGrid";
 import Home from "pages/Home";
 import Quote from "pages/Quote";
-import Chart from "pages/Chart";
 import TickerInput from "components/TickerInput";
 import MarketsSummaryTabs from "components/MarketsSummaryTabs";
 import { useCookies } from "react-cookie";
@@ -30,7 +29,6 @@ export default function App() {
             <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/chartgrid" element={<ChartGrid />} />
-              {/* <Route path="/chart/:ticker" element={<Chart />} /> */}
               <Route exact path="/quote" element={<Home />} />
               <Route path="/quote/:ticker" element={<Quote />} />
               <Route path="*" element={<Home />} />

@@ -1,5 +1,11 @@
-export default function NewsCard(props) {
+export default function LargeNewsCard(props) {
   const { imageUrl, publisher, title, time, articleUrl } = props;
+
+  const pluralOrNot = time[1] > 1;
+
+  const timeElapsed = `${time[1]} ${
+    pluralOrNot ? time[0] : time[0].slice(0, time[0].length)
+  } ago`;
 
   return (
     <div className="w-full max-w-md  bg-white rounded-xl shadow-md overflow-hidden sm:max-w-2xl">
@@ -23,7 +29,7 @@ export default function NewsCard(props) {
           >
             {publisher.name}
           </a>
-          <p className="mt-2 text-slate-500">{time}</p>
+          <p className="mt-2 text-slate-500">{timeElapsed}</p>
         </div>
       </div>
     </div>

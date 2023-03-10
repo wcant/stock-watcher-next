@@ -13,7 +13,9 @@ export default function TickerPriceHistory(props) {
     Open: new Intl.NumberFormat("en-US", USDollar).format(day?.o),
     Low: new Intl.NumberFormat("en-US", USDollar).format(day?.l),
     High: new Intl.NumberFormat("en-US", USDollar).format(day?.h),
-    Volume: new Intl.NumberFormat().format(day?.v),
+    Volume: new Intl.NumberFormat("en-US", { notation: "compact" }).format(
+      day?.v
+    ),
   };
 
   return (

@@ -61,11 +61,11 @@ export default function MarketsSummaryTabs(props) {
     label: "Currencies",
     type: "forex",
     tickers: {
-      EURUSD: { price: 0.9802, change: null, percentChange: null },
-      USDJPY: { price: 144.739, change: null, percentChange: null },
-      GBPUSD: { price: 1.115, change: null, percentChange: null },
-      USDCAD: { price: 1.3833, change: null, percentChange: null },
-      AUDUSD: { price: 0.6399, change: null, percentChange: null },
+      EURUSD: { price: 0.9802, change: null, percentChange: -1.83 },
+      USDJPY: { price: 144.739, change: null, percentChange: -0.55 },
+      GBPUSD: { price: 1.115, change: null, percentChange: 0.33 },
+      USDCAD: { price: 1.3833, change: null, percentChange: 1.8 },
+      AUDUSD: { price: 0.6399, change: null, percentChange: 1.64 },
     },
   });
   const [cryptoData, setCryptoData] = useState({

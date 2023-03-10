@@ -16,7 +16,7 @@ export default function MiniTickerCard(props) {
           isUp ? "text-green" : "text-red"
         }`}
       >
-        <span className="font-semibold">{percentChange}</span>
+        <span className="font-semibold">{`${percentChange}%`}</span>
         <span>{change}</span>
       </div>
     </div>

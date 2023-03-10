@@ -5,8 +5,9 @@ export default function Layout({ children }) {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+
       <Header />
-      {children}
+      <div className="grow-1 shrink-0 basis-auto">{children}</div>
       <Footer />
     </>
   );

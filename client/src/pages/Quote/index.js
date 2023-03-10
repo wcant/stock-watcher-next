@@ -65,6 +65,7 @@ export default function Quote() {
           </div>
         </div>
         <div className="">
+          <Heading hLevel="h2" content="Latest News" />
           {newsQuery.isFetched && <TickerNewsList data={newsQuery?.data} />}
         </div>
       </div>

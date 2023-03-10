@@ -1,9 +1,12 @@
-import NewsCard from "./NewsCard";
-import Heading from "./Heading";
-import luxon from "luxon";
+import { DateTime } from "luxon";
+import diffIsoDates from "utils/diffIsoDates";
 
 export default function TickerNewsList(props) {
-  const { results } = props.data;
+  const {
+    data: { results },
+    renderWith: NewsCard,
+    divideY,
+  } = props;
 
   const newsItems = [];
 
@@ -11,24 +14,38 @@ export default function TickerNewsList(props) {
     const { publisher, title, published_utc, article_url, image_url } =
       results[key];
 
-    newsItems.push(
-      <NewsCard
-        key={key}
-        publisher={publisher}
-        title={title}
-        articleUrl={article_url}
-        imageUrl={image_url}
-        time={published_utc}
-      />
+    const { values, invalid } = diffIsoDates(
+      DateTime.now(),
+      DateTime.fromISO(published_utc)
     );
+
+    if (invalid) {
+      console.error("Diff created is invalid.  Check DateTime format.");
+    } else {
+      const entries = Object.entries(values);
+      const firstNonZeroIndex = entries.findIndex((val) => val[1] > 0);
+      newsItems.push(
+        <NewsCard
+          key={key}
+          publisher={publisher}
+          title={title}
+          articleUrl={article_url}
+          imageUrl={image_url}
+          time={entries[firstNonZeroIndex]}
+        />
+      );
+    }
   }
 
   return (
-    <section className=" bg-white w-full p-6">
-      <Heading hLevel="h2" content="Latest News" />
-      <div className="flex flex-col justify-center items-center gap-4">
+    <div className="bg-white w-full">
+      <div
+        className={`flex flex-col gap-4 my-4 ${
+          divideY && "divide-y divide-solid"
+        }`}
+      >
         {newsItems}
       </div>
-    </section>
+    </div>
   );
 }
