@@ -105,6 +105,14 @@ app.get("/api/reference/tickerdetails/:ticker", async (req, res, next) => {
     .catch((err) => next(err));
 });
 
+app.get("/api/stocks/:direction", async (req, res, next) => {
+  const { direction } = req.params;
+  rest.stocks
+    .snapshotGainersLosers(direction)
+    .then((data) => res.json(data))
+    .catch((err) => next(err));
+});
+
 app.listen(PORT, () => {
   console.log(`API listening on ${PORT}`);
 });

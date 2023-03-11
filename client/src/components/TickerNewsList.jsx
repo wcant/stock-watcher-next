@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import diffIsoDates from "utils/diffIsoDates";
+import toTitleCase from "utils/toTitleCase";
 
 export default function TickerNewsList(props) {
   const {
@@ -28,7 +29,7 @@ export default function TickerNewsList(props) {
         <NewsCard
           key={key}
           publisher={publisher}
-          title={title}
+          title={toTitleCase(title)}
           articleUrl={article_url}
           imageUrl={image_url}
           time={entries[firstNonZeroIndex]}

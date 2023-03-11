@@ -1,66 +1,29 @@
-// Issues:
-// - Tickers with zero volume and high % changes tend to populate the results of this query
-//    would be nice to be able to filter by market cap and maybe just don't include results
-//    with zero volume (or other weird data)
-
-import { useState, useEffect } from "react";
 import TickerTable from "components/TickerTable";
 import axios from "axios";
-import { DELAY_1_MINUTE, DELAY_15_MINUTES, API_URL } from "utils/constants";
+import { DELAY_15_MINUTES, API_URL } from "utils/constants";
+import { useQuery } from "@tanstack/react-query";
 
-export default function GainersLosersTable(props) {
+export default function GainersLosersTable() {
   const headings = ["Ticker", "Last", "Change", "Change %", "Volume"];
-  const keysToExtract = [
-    "ticker",
-    ["min", "c"],
-    "todaysChange",
-    "todaysChangePerc",
-    ["day", "v"],
-  ];
 
-  const [gainers, setGainers] = useState({
-    data: [],
-    bodyRows: [],
-    footerRows: [],
-  });
-  const [losers, setLosers] = useState({
-    data: [],
-    bodyRows: [],
-    footerRows: [],
+  const gainersQuery = useQuery({
+    queryKey: ["home", "stocks", "gainers"],
+    queryFn: () =>
+      axios.get(API_URL + "/stocks/gainers").then((res) => res.data),
+    staleTime: DELAY_15_MINUTES,
   });
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        const response = await axios.get(API_URL + "/stocks/gainers");
-        setGainers((prevGainers) => ({
-          ...prevGainers,
-          data: response.data.tickers,
-          bodyRows: extractObjsToArrays(response.data.tickers, keysToExtract),
-        }));
-      } catch (error) {
-        console.log(error);
-      }
+  const losersQuery = useQuery({
+    queryKey: ["home", "stocks", "losers"],
+    queryFn: () =>
+      axios.get(API_URL + "/stocks/losers").then((res) => res.data),
+    staleTime: DELAY_15_MINUTES,
+  });
 
-      try {
-        const response = await axios.get(API_URL + "/stocks/losers");
-        setLosers((prevLosers) => ({
-          ...prevLosers,
-          data: response.data.tickers,
-          bodyRows: extractObjsToArrays(response.data.tickers, keysToExtract),
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  // maximum of 20 rows, so not going to memo this
+  const gainersBodyRows = parseGainersLosers(gainersQuery.data?.tickers);
 
-    getData();
-    const interval = setInterval(() => {
-      getData();
-    }, DELAY_15_MINUTES);
-
-    return () => clearInterval(interval);
-  }, []);
+  const losersBodyRows = parseGainersLosers(losersQuery.data?.tickers);
 
   return (
     <div
@@ -69,46 +32,37 @@ export default function GainersLosersTable(props) {
     >
       <div>
         <h2 className="font-semibold">Top Gainers</h2>
-        <TickerTable
-          headings={headings}
-          bodyRows={gainers.bodyRows}
-          footerRows={gainers.footerRows}
-        />
+        <TickerTable headings={headings} bodyRows={gainersBodyRows} />
       </div>
       <div className="border-l">
         <h2 className="font-semibold">Top Losers</h2>
-        <TickerTable
-          headings={headings}
-          bodyRows={losers.bodyRows}
-          footerRows={losers.footerRows}
-        />
+        <TickerTable headings={headings} bodyRows={losersBodyRows} />
       </div>
     </div>
   );
 }
 
-function extractObjsToArrays(arrayOfObjs, keys) {
-  return arrayOfObjs.map((obj) => {
-    const newArray = [];
-    // writing this for this specific case
-    // might do this recursively for a general solution
-    // for traversing an object of arbitrary depth
-    for (const key of keys) {
-      if (typeof key === "object" && key !== null) {
-        // check if is number and set toFixed(2)
-        const value = obj[key[0]][key[1]];
-        if (typeof value === "number") {
-          newArray.push(value.toFixed(2));
-        } else newArray.push(obj[key[0]][key[1]]);
-      } else {
-        const value = obj[key];
-        if (typeof value === "number") {
-          newArray.push(value.toFixed(2));
-        } else {
-          newArray.push(value);
-        }
-      }
-    }
-    return newArray;
+function parseGainersLosers(data) {
+  return data.reduce((rows, result) => {
+    const {
+      ticker,
+      todaysChangePerc,
+      todaysChange,
+      day: { v: volume },
+      min: { c: last },
+    } = result;
+
+    const compactVolume = Intl.NumberFormat("en-us", {
+      notation: "compact",
+    }).format(volume);
+
+    rows.push([
+      ticker,
+      last.toFixed(2),
+      todaysChange.toFixed(2),
+      todaysChangePerc.toFixed(2),
+      compactVolume,
+    ]);
+    return rows;
   });
 }

@@ -23,9 +23,9 @@ export default function Home() {
         <TickerInput />
       </div>
       <div className="grid grid-cols-5 bg-white divide-x divide-solid p-4 rounded-xl">
-        <div className="col-span-3">
+        <div className="col-span-3 pr-4">
           <section>
-            <h2>You might be interested in</h2>
+            <Heading hLevel="h2" content="You might be interested in" />
           </section>
           <section>
             <Heading hLevel="h2" content="Today's Financial News" />
@@ -41,9 +41,9 @@ export default function Home() {
             <GainersLosersTable />
           </section>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-2 pl-4">
           <section>
-            <h2>Your Watchlists</h2>
+            <Heading hLevel="h2" content="Your Watchlists" />
           </section>
           <section>
             <MarketHolidays />
