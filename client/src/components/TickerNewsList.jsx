@@ -25,6 +25,7 @@ export default function TickerNewsList(props) {
     } else {
       const entries = Object.entries(values);
       const firstNonZeroIndex = entries.findIndex((val) => val[1] > 0);
+
       newsItems.push(
         <NewsCard
           key={key}

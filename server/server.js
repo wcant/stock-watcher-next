@@ -1,18 +1,14 @@
-import {
-  polygonClient,
-  restClient,
-  websocketClient,
-} from "@polygon.io/client-js";
+import { restClient } from "@polygon.io/client-js";
 import path from "path";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import { fileURLToPath } from "url";
+import axios from "axios";
 
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 import express from "express";
-import { nextTick } from "process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -103,6 +99,18 @@ app.get("/api/reference/tickerdetails/:ticker", async (req, res, next) => {
     .tickerDetails(ticker)
     .then((data) => res.json(data))
     .catch((err) => next(err));
+});
+
+app.get("/api/stocks/popular", async (req, res, next) => {
+  try {
+    const response = await axios.get(
+      "https://apewisdom.io/api/v1.0/filter/all-stocks/page/1"
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 app.get("/api/stocks/:direction", async (req, res, next) => {

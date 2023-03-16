@@ -19,11 +19,11 @@ export default function SmallNewsCard(props) {
           </a>
           <p className="text-slate-500">{timeElapsed}</p>
         </div>
-        <div className="uppercase tracking-wide p-2 text-sm text-indigo-500 font-semibold">
+        <div className="pr-4 text-sm text-indigo-500 font-semibold">
           <a href={articleUrl}>{title}</a>
         </div>
       </div>
-      <div className="flex items-center sm:shrink-0">
+      <div className="flex justify-center items-center sm:shrink-0">
         {imageUrl && (
           <img className="w-28 h-auto object-cover" src={imageUrl} alt="" />
         )}

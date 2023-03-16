@@ -1,4 +1,4 @@
-import TickerTable from "components/TickerTable";
+import { TableRow } from "components/Table";
 import axios from "axios";
 import { DELAY_15_MINUTES, API_URL } from "utils/constants";
 import { useQuery } from "@tanstack/react-query";
@@ -20,11 +20,7 @@ export default function GainersLosersTable() {
     staleTime: DELAY_15_MINUTES,
   });
 
-  // maximum of 20 rows, so not going to memo this
-  const gainersBodyRows = parseGainersLosers(gainersQuery.data?.tickers);
-
-  const losersBodyRows = parseGainersLosers(losersQuery.data?.tickers);
-
+  // return (<TickerTable headings={headings} noData={true} />
   return (
     <div
       className="grid grid-cols-2 p-4
@@ -32,37 +28,51 @@ export default function GainersLosersTable() {
     >
       <div>
         <h2 className="font-semibold">Top Gainers</h2>
-        <TickerTable headings={headings} bodyRows={gainersBodyRows} />
+        {gainersQuery.isSuccess && (
+          <TableRow
+            headings={headings}
+            bodyRows={parseGainersLosers(gainersQuery.data?.tickers)}
+          />
+        )}
       </div>
       <div className="border-l">
         <h2 className="font-semibold">Top Losers</h2>
-        <TickerTable headings={headings} bodyRows={losersBodyRows} />
+        {losersQuery.isSuccess && (
+          <TableRow
+            headings={headings}
+            bodyRows={parseGainersLosers(losersQuery.data?.tickers)}
+          />
+        )}
       </div>
     </div>
   );
 }
 
 function parseGainersLosers(data) {
-  return data.reduce((rows, result) => {
-    const {
-      ticker,
-      todaysChangePerc,
-      todaysChange,
-      day: { v: volume },
-      min: { c: last },
-    } = result;
+  try {
+    return data.reduce((rows, result) => {
+      const {
+        ticker,
+        todaysChangePerc,
+        todaysChange,
+        day: { v: volume },
+        min: { c: last },
+      } = result;
 
-    const compactVolume = Intl.NumberFormat("en-us", {
-      notation: "compact",
-    }).format(volume);
+      const compactVolume = Intl.NumberFormat("en-us", {
+        notation: "compact",
+      }).format(volume);
 
-    rows.push([
-      ticker,
-      last.toFixed(2),
-      todaysChange.toFixed(2),
-      todaysChangePerc.toFixed(2),
-      compactVolume,
-    ]);
-    return rows;
-  });
+      rows.push([
+        ticker,
+        last.toFixed(2),
+        todaysChange.toFixed(2),
+        todaysChangePerc.toFixed(2),
+        compactVolume,
+      ]);
+      return rows;
+    }, []);
+  } catch (error) {
+    console.error(error);
+  }
 }
