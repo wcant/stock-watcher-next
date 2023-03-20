@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+interface Row {
+  type: "head" | "body" | "foot";
+  cols: string[];
+}
 
 export function Table(props) {
   const { children } = props;
@@ -10,7 +13,12 @@ export function TableHead(props) {
   return <thead>{children}</thead>;
 }
 
-export function TableRow(props) {
+export function TableBody(props) {
+  const { children } = props;
+  return <tbody>{children}</tbody>;
+}
+
+export function TableRow(props: Row): HTMLTableRowElement {
   const { cols, type } = props;
   return (
     <tr>

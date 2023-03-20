@@ -9,7 +9,7 @@ export default function Watchlist(props) {
           <ListItem
             key={ticker.ticker}
             ticker={ticker.ticker}
-            price={ticker.min.c}
+            price={ticker?.min?.c}
             change={ticker.todaysChange}
             percentChange={ticker.todyasChangePerc}
           />

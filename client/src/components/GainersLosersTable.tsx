@@ -1,4 +1,4 @@
-import { TableRow } from "components/Table";
+import { Table, TableHead, TableBody, TableRow } from "components/Table";
 import axios from "axios";
 import { DELAY_15_MINUTES, API_URL } from "utils/constants";
 import { useQuery } from "@tanstack/react-query";
@@ -20,29 +20,41 @@ export default function GainersLosersTable() {
     staleTime: DELAY_15_MINUTES,
   });
 
-  // return (<TickerTable headings={headings} noData={true} />
+  const gainersRows = parseGainersLosers(gainersQuery.data?.tickers);
+  const losersRows = parseGainersLosers(losersQuery.data?.tickers);
+
   return (
     <div
       className="grid grid-cols-2 p-4
-    mt-4 mb-4 rounded-lg overflow-auto bg-white text-center"
+mt-4 mb-4 rounded-lg overflow-auto bg-white text-center"
     >
       <div>
         <h2 className="font-semibold">Top Gainers</h2>
-        {gainersQuery.isSuccess && (
-          <TableRow
-            headings={headings}
-            bodyRows={parseGainersLosers(gainersQuery.data?.tickers)}
-          />
-        )}
+        <Table>
+          <TableHead>
+            <TableRow type="head" cols={headings} />
+          </TableHead>
+          <TableBody>
+            {gainersQuery.isSuccess &&
+              gainersRows.map((cols, i) => (
+                <TableRow key={i} type="body" cols={cols} />
+              ))}
+          </TableBody>
+        </Table>
       </div>
-      <div className="border-l">
+      <div>
         <h2 className="font-semibold">Top Losers</h2>
-        {losersQuery.isSuccess && (
-          <TableRow
-            headings={headings}
-            bodyRows={parseGainersLosers(losersQuery.data?.tickers)}
-          />
-        )}
+        <Table>
+          <TableHead>
+            <TableRow type="head" cols={headings} />
+          </TableHead>
+          <TableBody>
+            {losersQuery.isSuccess &&
+              losersRows.map((cols, i) => (
+                <TableRow key={i} type="body" cols={cols} />
+              ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
