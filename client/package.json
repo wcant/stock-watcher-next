@@ -2,10 +2,12 @@
   "name": "stock-watcher",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@polygon.io/client-js": "^6.2.2",
     "@tanstack/react-query": "^4.22.0",
     "@tanstack/react-query-devtools": "^4.22.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -15,26 +17,25 @@
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "eslint": "^8.37.0",
+    "eslint-config-next": "^13.2.4",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.2.1",
     "nanoid": "^4.0.0",
+    "next": "latest",
     "plotly.js": "^2.14.0",
-    "react": "^18.2.0",
+    "react": "latest",
     "react-cookie": "^4.1.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "latest",
     "react-hot-toast": "^2.4.0",
     "react-plotly.js": "^2.5.1",
-    "react-router-dom": "^6.4.2",
-    "react-scripts": "5.0.1",
-    "typescript": "^5.0.2",
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:4000/",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +58,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.16",
-    "tailwindcss": "^3.1.8"
+    "tailwindcss": "^3.1.8",
+    "typescript": "5.0.2"
   }
 }
